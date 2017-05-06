@@ -11,7 +11,11 @@ export default {
 
 <style>
 @import '../node_modules/bootstrap/dist/css/bootstrap.css';
+@import '../node_modules/animate.css/animate.css';
+@import '../node_modules/material-design-iconic-font/dist/css/material-design-iconic-font.css';
+@import 'assets/style.css';
+
 body {
-  background-color: #f3f3f4;
+  overflow: visible;
 }
 </style>

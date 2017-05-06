@@ -15,7 +15,7 @@
         <div class="form-group">
           <input type="password" class="form-control" placeholder="Password" required="" v-model="credentials.password">
         </div>
-        <button type="submit" class="btn btn-primary block full-width mb">Login</button>
+        <button type="submit" class="btn btn-raised btn-primary block full-width mb">Login</button>
 
         <router-link to="/"><small>Forgot password?</small></router-link>
         <p class="text-muted text-center"><small>Do not have an account?</small></p>

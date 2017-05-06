@@ -4,6 +4,8 @@ import VueResource from 'vue-resource'
 
 import Main from '@/views/Main'
 import Login from '@/views/Login'
+import Cardboard from '@/views/Cardboard'
+import Paper from '@/views/Paper'
 
 Vue.use(Router)
 Vue.use(VueResource)
@@ -12,7 +14,14 @@ const router = new Router({
   mode: 'history',
   routes: [{
     path: '/',
-    component: Main
+    component: Main,
+    children: [{
+      path: '',
+      component: Cardboard
+    }, {
+      path: '/assessment',
+      component: Paper
+    }]
   }, {
     path: '/login',
     component: Login
