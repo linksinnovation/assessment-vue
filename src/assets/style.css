@@ -1773,7 +1773,7 @@ label.control-label {
     font-weight: 400
 }
 .form-group label.control-label {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1.07143;
     font-weight: 400;
     margin: 16px 0 0
@@ -7787,7 +7787,7 @@ label.color-white {
     display: none
 }
 .ms-navbar .navbar-nav.navbar-right {
-    margin-right: 50px
+    margin-right: 0px
 }
 .ms-navbar .navbar-nav li {
     font-size: 16px
@@ -7829,9 +7829,9 @@ label.color-white {
     -webkit-transform: scale(0);
     transform: scale(0);
     -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
-    left: 0;
-    right: auto
+    transform-origin: 100% 0;
+    left: auto;
+    right: 0
 }
 .ms-navbar .navbar-nav li.dropdown .dropdown-menu:focus,
 .ms-navbar .navbar-nav li.dropdown .dropdown-menu:hover {

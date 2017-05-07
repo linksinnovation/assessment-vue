@@ -13,6 +13,9 @@ export default {
 @import '../node_modules/bootstrap/dist/css/bootstrap.css';
 @import '../node_modules/animate.css/animate.css';
 @import '../node_modules/material-design-iconic-font/dist/css/material-design-iconic-font.css';
+@import '../node_modules/bootstrap-select/dist/css/bootstrap-select.css';
+@import '../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css';
+@import '../node_modules/font-awesome/css/font-awesome.css';
 @import 'assets/style.css';
 
 body {

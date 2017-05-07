@@ -6,6 +6,11 @@ import Main from '@/views/Main'
 import Login from '@/views/Login'
 import Cardboard from '@/views/Cardboard'
 import Paper from '@/views/Paper'
+import PrePaper from '@/views/PrePaper'
+import Assessment from '@/views/Assessment'
+import Setting from '@/views/assessment/Setting'
+import PreSetting from '@/views/assessment/PreSetting'
+import Manage from '@/views/assessment/Manage'
 
 Vue.use(Router)
 Vue.use(VueResource)
@@ -20,7 +25,42 @@ const router = new Router({
       component: Cardboard
     }, {
       path: '/assessment',
-      component: Paper
+      component: PrePaper,
+      children: [{
+        path: '',
+        component: PreSetting
+      }]
+    }, {
+      path: '/assessment/:id(\\d+)',
+      component: Paper,
+      children: [{
+        path: 'assessment',
+        component: Assessment
+      }, {
+        path: 'course',
+        component: Setting
+      }, {
+        path: 'setting',
+        component: Setting
+      }, {
+        path: 'manage',
+        component: Manage
+      }, {
+        path: 'managecourse',
+        component: Setting
+      }, {
+        path: 'import',
+        component: Setting
+      }, {
+        path: 'report',
+        component: Setting
+      }, {
+        path: 'dashboard',
+        component: Setting
+      }, {
+        path: 'qrcode',
+        component: Setting
+      }]
     }]
   }, {
     path: '/login',

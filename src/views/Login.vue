@@ -10,7 +10,7 @@
       <p>Login in. To see it in action.</p>
       <form class="mt" role="form" v-on:submit.prevent="onSubmit">
         <div class="form-group">
-          <input type="email" class="form-control" placeholder="Email" required="" v-model="credentials.username">
+          <input type="text" class="form-control" placeholder="Username" required="" v-model="credentials.username">
         </div>
         <div class="form-group">
           <input type="password" class="form-control" placeholder="Password" required="" v-model="credentials.password">

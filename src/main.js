@@ -6,6 +6,9 @@ import router from './router'
 import store from './store'
 
 import '../node_modules/bootstrap/dist/js/bootstrap.js'
+import '../node_modules/bootstrap-select/dist/js/bootstrap-select.js'
+import '../node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'
+import '@/assets/app.js'
 
 Vue.config.productionTip = false
 
