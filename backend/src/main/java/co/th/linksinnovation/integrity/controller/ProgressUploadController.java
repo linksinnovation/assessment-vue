@@ -1,19 +1,27 @@
 package co.th.linksinnovation.integrity.controller;
 
+import co.th.linksinnovation.integrity.model.Assessment;
 import co.th.linksinnovation.integrity.model.Course;
+import co.th.linksinnovation.integrity.model.OrganizeData;
 import co.th.linksinnovation.integrity.model.enumuration.ContentType;
+import co.th.linksinnovation.integrity.repository.AssessmentRepository;
 import co.th.linksinnovation.integrity.repository.CourseRepository;
+import co.th.linksinnovation.integrity.repository.OrganizeDataRepository;
 import co.th.linksinnovation.integrity.utils.MD5;
 import co.th.linksinnovation.integrity.utils.mediainfo.MediaInfo;
 import co.th.linksinnovation.integrity.utils.mediainfo.MediaInfoUtil;
 import co.th.linksinnovation.integrity.utils.ppt2pdf.Ppt2Pdf;
 import com.itextpdf.text.DocumentException;
+import com.univocity.parsers.common.processor.BeanListProcessor;
+import com.univocity.parsers.csv.CsvParser;
+import com.univocity.parsers.csv.CsvParserSettings;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URLDecoder;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -27,6 +35,10 @@ public class ProgressUploadController {
 
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private AssessmentRepository assessmentRepository;
+    @Autowired
+    private OrganizeDataRepository organizeDataRepository;
 
     @RequestMapping(value = "/videoupload", method = RequestMethod.PUT)
     public void upload(@RequestBody byte[] file, HttpServletRequest request) throws IOException, InterruptedException {
@@ -58,12 +70,12 @@ public class ProgressUploadController {
             courseRepository.save(course);
         }
     }
-    
+
     @RequestMapping(value = "/pptupload", method = RequestMethod.PUT)
     public void pptUpload(@RequestBody byte[] file, HttpServletRequest request) throws UnsupportedEncodingException, IOException, DocumentException {
         InputStream chunk = new ByteArrayInputStream(file);
         String filename = URLDecoder.decode(request.getHeader("Content-Name"), "UTF-8");
-        appendFile(request.getHeader("Content-Start"),chunk, new File("/mnt/data/files/" + request.getHeader("Content-Lecture") + "-" + filename));
+        appendFile(request.getHeader("Content-Start"), chunk, new File("/mnt/data/files/" + request.getHeader("Content-Lecture") + "-" + filename));
         if (request.getHeader("Content-End") != null && request.getHeader("Content-End").equals(request.getHeader("Content-FileSize"))) {
             Ppt2Pdf.convert(
                     new FileInputStream("/mnt/data/files/" + request.getHeader("Content-Lecture") + "-" + filename),
@@ -73,6 +85,38 @@ public class ProgressUploadController {
             course.setContent(filename);
             course.setContentType(ContentType.PPT);
             courseRepository.save(course);
+        }
+    }
+
+    @RequestMapping(value = "/csvupload", method = RequestMethod.PUT)
+    public void csvUpload(@RequestBody byte[] file, HttpServletRequest request) throws UnsupportedEncodingException, IOException, DocumentException {
+        InputStream chunk = new ByteArrayInputStream(file);
+        String filename = URLDecoder.decode(request.getHeader("Content-Name"), "UTF-8");
+        appendFile(request.getHeader("Content-Start"), chunk, new File("/mnt/data/files/" + request.getHeader("Content-Lecture") + "-" + filename));
+        if (request.getHeader("Content-End") != null && request.getHeader("Content-End").equals(request.getHeader("Content-FileSize"))) {
+            BeanListProcessor<OrganizeData> rowProcessor = new BeanListProcessor<>(OrganizeData.class);
+
+            CsvParserSettings parserSettings = new CsvParserSettings();
+            parserSettings.setRowProcessor(rowProcessor);
+            parserSettings.setHeaderExtractionEnabled(true);
+
+            CsvParser parser = new CsvParser(parserSettings);
+            parser.parse(new File("/mnt/data/files/" + request.getHeader("Content-Lecture") + "-" + filename));
+
+            List<OrganizeData> beans = rowProcessor.getBeans();
+
+            Assessment assessment = assessmentRepository.findOne(Integer.parseInt(request.getHeader("Content-Lecture")));
+            organizeDataRepository.removeByAssessment(assessment);
+
+            for (OrganizeData org : beans) {
+                org.setAssessment(assessment);
+            }
+
+            assessment = assessmentRepository.findOne(Integer.parseInt(request.getHeader("Content-Lecture")));
+            assessment.setOrganizeFile(filename);
+            assessment.getOrganizeDatas().clear();
+            assessment.getOrganizeDatas().addAll(beans);
+            assessmentRepository.save(assessment);
         }
     }
 

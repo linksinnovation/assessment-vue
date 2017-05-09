@@ -5,10 +5,12 @@
  */
 package co.th.linksinnovation.integrity.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.univocity.parsers.annotations.Parsed;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import lombok.Data;
 
 /**
@@ -51,4 +53,6 @@ public class OrganizeData {
     private String username;
     @Parsed(index = 0)
     private String employeeId;
+    @ManyToOne
+    private Assessment assessment;
 }

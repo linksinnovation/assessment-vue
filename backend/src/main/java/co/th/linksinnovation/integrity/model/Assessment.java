@@ -6,6 +6,7 @@
 package co.th.linksinnovation.integrity.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.Date;
 import java.util.List;
@@ -52,4 +53,9 @@ public class Assessment {
     @JsonManagedReference
     @OrderBy("id ASC")
     private List<Section> sections;
+    private String organizeFile;
+    @OneToMany(mappedBy = "assessment",cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonIgnore
+    @OrderBy("id ASC")
+    private List<OrganizeData> organizeDatas;
 }

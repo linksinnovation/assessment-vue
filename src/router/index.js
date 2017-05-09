@@ -12,6 +12,7 @@ import Setting from '@/views/assessment/Setting'
 import PreSetting from '@/views/assessment/PreSetting'
 import Manage from '@/views/assessment/Manage'
 import ManageCourse from '@/views/assessment/ManageCourse'
+import ImportData from '@/views/assessment/ImportData'
 
 Vue.use(Router)
 Vue.use(VueResource)
@@ -51,7 +52,7 @@ const router = new Router({
         component: ManageCourse
       }, {
         path: 'import',
-        component: Setting
+        component: ImportData
       }, {
         path: 'report',
         component: Setting
