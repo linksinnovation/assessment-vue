@@ -4,14 +4,10 @@
     <section class="ms-component-section">
       <div v-for="(question,index) in data.questions" class="panel-group ms-collapse" :id="'accordion-'+index" role="tablist" aria-multiselectable="true">
         <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="headingOne">
-            <h4 class="panel-title ms-rotate-icon">
-                                                <a class="collapsed" role="button" data-toggle="collapse" :data-parent="'#accordion-'+index" :href="'#collapse-'+index" aria-expanded="false" aria-controls="collapseOne">
-                                                  <i class="zmdi zmdi-attachment-alt"></i> {{question.question}}
-                                                </a>
-                                              </h4>
+          <div class="panel-heading" role="tab" :id="'heading-'+index">
+            <h4 class="panel-title ms-rotate-icon"><a class="collapsed" role="button" data-toggle="collapse" :data-parent="'#accordion-'+index" :href="'#collapse-'+index" aria-expanded="false" aria-controls="collapseOne"><i class="zmdi zmdi-attachment-alt"></i> {{question.question}}</a></h4>
           </div>
-          <div :id="'collapse-'+index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
+          <div :id="'collapse-'+index" class="panel-collapse collapse" role="tabpanel" :aria-labelledby="'heading-'+index" aria-expanded="false" style="height: 0px;">
             <div class="panel-body">
               <form class="form-horizontal" autocomplete="off">
                 <div class="form-group">

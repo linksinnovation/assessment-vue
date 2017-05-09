@@ -48,4 +48,8 @@ public class Assessment {
     @JsonManagedReference
     @OrderBy("id ASC")
     private List<Question> questions;
+    @OneToMany(mappedBy = "assessment",cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference
+    @OrderBy("id ASC")
+    private List<Section> sections;
 }
