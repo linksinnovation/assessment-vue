@@ -23,22 +23,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/assessment")
 public class AssessmentController {
-    
+
     @Autowired
     private AssessmentRepository assessmentRepository;
-    
+
     @GetMapping("/{id}")
-    public Assessment get(@PathVariable Integer id){
+    public Assessment get(@PathVariable Integer id) {
         return assessmentRepository.findOne(id);
     }
-    
-     @GetMapping
-    public List<Assessment> get(){
+
+    @GetMapping
+    public List<Assessment> get() {
         return assessmentRepository.findAll();
     }
-    
+
     @PostMapping
-    public Assessment post(@RequestBody Assessment assessment){
+    public Assessment post(@RequestBody Assessment assessment) {
         return assessmentRepository.save(assessment);
     }
 }

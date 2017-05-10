@@ -7,7 +7,9 @@ import co.th.linksinnovation.integrity.model.enumuration.ContentType;
 import co.th.linksinnovation.integrity.repository.AssessmentRepository;
 import co.th.linksinnovation.integrity.repository.CourseRepository;
 import co.th.linksinnovation.integrity.repository.OrganizeDataRepository;
+import co.th.linksinnovation.integrity.service.OrganizeDataService;
 import co.th.linksinnovation.integrity.utils.MD5;
+import co.th.linksinnovation.integrity.utils.QualitySelect;
 import co.th.linksinnovation.integrity.utils.mediainfo.MediaInfo;
 import co.th.linksinnovation.integrity.utils.mediainfo.MediaInfoUtil;
 import co.th.linksinnovation.integrity.utils.ppt2pdf.Ppt2Pdf;
@@ -21,8 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URLDecoder;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by Kong on 12/26/2015 AD.
@@ -39,6 +44,9 @@ public class ProgressUploadController {
     private AssessmentRepository assessmentRepository;
     @Autowired
     private OrganizeDataRepository organizeDataRepository;
+    
+    @Autowired
+    private OrganizeDataService organizeDataService;
 
     @RequestMapping(value = "/videoupload", method = RequestMethod.PUT)
     public void upload(@RequestBody byte[] file, HttpServletRequest request) throws IOException, InterruptedException {
@@ -54,7 +62,14 @@ public class ProgressUploadController {
             course.setDuration(Long.parseLong(mediaInfo.get("Video", "Duration")));
             course.setUpdateDate(new Date());
             course.setUuid(hexFile);
-            courseRepository.save(course);
+            course = courseRepository.save(course);
+            
+            RestTemplate rest = new RestTemplate();
+            Map<String, Object> map = new HashMap<>();
+            map.put("uuid", hexFile);
+            map.put("lecture", course.getId());
+            map.put("quality", QualitySelect.select(mediaInfo.get("Video", "Height")).toString());
+            rest.postForEntity("http://10.1.2.202:8080", map, String.class);
         }
     }
 
@@ -98,6 +113,7 @@ public class ProgressUploadController {
 
             CsvParserSettings parserSettings = new CsvParserSettings();
             parserSettings.setRowProcessor(rowProcessor);
+            parserSettings.setNullValue("");
             parserSettings.setHeaderExtractionEnabled(true);
 
             CsvParser parser = new CsvParser(parserSettings);
@@ -117,6 +133,7 @@ public class ProgressUploadController {
             assessment.getOrganizeDatas().clear();
             assessment.getOrganizeDatas().addAll(beans);
             assessmentRepository.save(assessment);
+            organizeDataService.calculateOrganizeChart(assessment);
         }
     }
 

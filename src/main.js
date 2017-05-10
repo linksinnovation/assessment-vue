@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueVideoPlayer from 'vue-video-player'
 import { sync } from 'vuex-router-sync'
 
 import App from './App'
@@ -13,6 +14,8 @@ import '../node_modules/bootstrap-material-design/dist/js/ripples.js'
 import '@/assets/app.js'
 
 Vue.config.productionTip = false
+
+Vue.use(VueVideoPlayer)
 
 sync(store, router)
 store.dispatch('checkAuth', router)

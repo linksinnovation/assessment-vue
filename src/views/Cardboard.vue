@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-2">
+  <div id="cardboard" class="container mt-2">
   
     <card v-for="item of data" :props="item" :key="item.id"></card>
   
@@ -38,3 +38,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+#cardboard {
+  min-height: calc(100vh - 160px);
+}
+</style>

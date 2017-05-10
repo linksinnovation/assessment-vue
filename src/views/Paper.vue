@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="paper">
     <div class="material-background"></div>
     <div class="container container-full">
       <div class="ms-paper">
@@ -7,40 +7,40 @@
           <div class="col-md-3 ms-paper-menu-left-container">
             <div class="ms-paper-menu-left">
               <h3 class="ms-paper-menu-title">
-                              <i class="zmdi zmdi-apps"></i> เมนูแบบประเมิน
-                              <a role="button" data-toggle="collapse" href="#collapseMenu" aria-expanded="false" aria-controls="collapseMenu" class="withripple collapsed">
-                                <i class="zmdi zmdi-menu"></i>
-                                <div class="ripple-container"></div>
-                              </a>
-                            </h3>
+                                <i class="zmdi zmdi-apps"></i> เมนูแบบประเมิน
+                                <a role="button" data-toggle="collapse" href="#collapseMenu" aria-expanded="false" aria-controls="collapseMenu" class="withripple collapsed">
+                                  <i class="zmdi zmdi-menu"></i>
+                                  <div class="ripple-container"></div>
+                                </a>
+                              </h3>
               <div class="panel-menu collapse" id="collapseMenu" aria-expanded="false" style="height: 0px;">
                 <ul class="panel-group ms-collapse-nav" role="tablist">
                   <li>
-                    <router-link :to="{path: '/assessment/'+id+'/assessment'}" role="button"><i class="zmdi zmdi-folder-star-alt"></i> แบบประเมิน</router-link>
+                    <router-link :to="{path: '/assessment/'+id+'/assessment'}" role="button"><i class="fa fa-bars"></i> แบบประเมิน</router-link>
                   </li>
                   <li>
-                    <router-link :to="{path: '/assessment/'+id+'/course'}" role="button"><i class="zmdi zmdi-folder-star-alt"></i> สื่อการสอน</router-link>
+                    <router-link :to="{path: '/assessment/'+id+'/course'}" role="button"><i class="fa fa-bars"></i> สื่อการสอน</router-link>
                   </li>
                   <li v-if="authority == 'Administrator'">
-                    <router-link :to="{path: '/assessment/'+id+'/setting'}" role="button"><i class="zmdi zmdi-folder-star-alt"></i> ตั้งค่าแบบประเมิน</router-link>
+                    <router-link :to="{path: '/assessment/'+id+'/setting'}" role="button"><i class="fa fa-bars"></i> ตั้งค่าแบบประเมิน</router-link>
                   </li>
                   <li v-if="authority == 'Administrator'">
-                    <router-link :to="{path: '/assessment/'+id+'/manage'}" role="button"><i class="zmdi zmdi-folder-star-alt"></i> จัดการแบบประเมิน</router-link>
+                    <router-link :to="{path: '/assessment/'+id+'/manage'}" role="button"><i class="fa fa-bars"></i> จัดการแบบประเมิน</router-link>
                   </li>
                   <li v-if="authority == 'Administrator'">
-                    <router-link :to="{path: '/assessment/'+id+'/managecourse'}" role="button"><i class="zmdi zmdi-folder-star-alt"></i> จัดการสือการสอน</router-link>
+                    <router-link :to="{path: '/assessment/'+id+'/managecourse'}" role="button"><i class="fa fa-bars"></i> จัดการสือการสอน</router-link>
                   </li>
                   <li v-if="authority == 'Administrator'">
-                    <router-link :to="{path: '/assessment/'+id+'/import'}" role="button"><i class="zmdi zmdi-folder-star-alt"></i> นำเข้าข้อมูล</router-link>
+                    <router-link :to="{path: '/assessment/'+id+'/import'}" role="button"><i class="fa fa-bars"></i> นำเข้าข้อมูล</router-link>
                   </li>
                   <li v-if="authority == 'Administrator'">
-                    <router-link :to="{path: '/assessment/'+id+'/report'}" role="button"><i class="zmdi zmdi-tab"></i> รายงาน</router-link>
+                    <router-link :to="{path: '/assessment/'+id+'/report'}" role="button"><i class="fa fa-bars"></i> รายงาน</router-link>
                   </li>
                   <li v-if="authority == 'Administrator'">
-                    <router-link :to="{path: '/assessment/'+id+'/dashboard'}" role="button"><i class="zmdi zmdi-folder-star-alt"></i> Dashboard</router-link>
+                    <router-link :to="{path: '/assessment/'+id+'/dashboard'}" role="button"><i class="fa fa-bars"></i> Dashboard</router-link>
                   </li>
                   <li v-if="authority == 'Administrator'">
-                    <router-link :to="{path: '/assessment/'+id+'/qrcode'}" role="button"><i class="zmdi zmdi-tab"></i> QR Code</router-link>
+                    <router-link :to="{path: '/assessment/'+id+'/qrcode'}" role="button"><i class="fa fa-bars"></i> QR Code</router-link>
                   </li>
                 </ul>
                 <!-- ms-collapse-nav -->
@@ -79,12 +79,15 @@ export default {
 </script>
 
 <style lang='scss'>
-.paper-view {
-  min-height: 446px;
+#paper {
+  min-height: calc(100vh - 160px);
+  .paper-view {
+    min-height: 492px;
 
-  .ms-collapse-nav li a.router-link-active {
-    background-color: #03a9f4;
-    color: #fff;
+    .ms-collapse-nav li a.router-link-active {
+      background-color: #03a9f4;
+      color: #fff;
+    }
   }
 }
 </style>

@@ -7,12 +7,13 @@ import Login from '@/views/Login'
 import Cardboard from '@/views/Cardboard'
 import Paper from '@/views/Paper'
 import PrePaper from '@/views/PrePaper'
-import Assessment from '@/views/Assessment'
+import Assessment from '@/views/assessment/Assessment'
 import Setting from '@/views/assessment/Setting'
 import PreSetting from '@/views/assessment/PreSetting'
 import Manage from '@/views/assessment/Manage'
 import ManageCourse from '@/views/assessment/ManageCourse'
 import ImportData from '@/views/assessment/ImportData'
+import Course from '@/views/assessment/Course'
 
 Vue.use(Router)
 Vue.use(VueResource)
@@ -40,7 +41,7 @@ const router = new Router({
         component: Assessment
       }, {
         path: 'course',
-        component: Setting
+        component: Course
       }, {
         path: 'setting',
         component: Setting

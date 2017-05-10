@@ -5,7 +5,6 @@
  */
 package co.th.linksinnovation.integrity.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.univocity.parsers.annotations.Parsed;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +21,7 @@ import lombok.Data;
 public class OrganizeData {
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
     @Parsed(index = 8)
     private String organizeId;
     @Parsed(index = 9)

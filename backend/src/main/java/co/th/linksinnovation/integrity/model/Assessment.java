@@ -8,9 +8,11 @@ package co.th.linksinnovation.integrity.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -33,7 +35,10 @@ public class Assessment {
     @GeneratedValue
     private Integer id;
     private String title;
+    @Column(length = 4000)
     private String detail;
+    @Column(length = 4000)
+    private String objective;
     @JsonFormat(pattern="dd/MM/yyyy")
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
@@ -54,8 +59,19 @@ public class Assessment {
     @OrderBy("id ASC")
     private List<Section> sections;
     private String organizeFile;
-    @OneToMany(mappedBy = "assessment",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "assessment",cascade = CascadeType.ALL)
     @JsonIgnore
     @OrderBy("id ASC")
     private List<OrganizeData> organizeDatas;
+    @OneToMany(mappedBy = "assessment",cascade = CascadeType.ALL)
+    @OrderBy("id DESC")
+    @JsonManagedReference
+    private List<AssessmentUser> assessmentUsers;
+    
+    public void addAssessmentUser(AssessmentUser assessmentUser){
+        if(this.assessmentUsers.isEmpty()){
+            this.assessmentUsers = new ArrayList<>();
+        }
+        this.assessmentUsers.add(assessmentUser);
+    }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="prepaper">
     <div class="material-background"></div>
     <div class="container container-full">
       <div class="ms-paper">
@@ -7,12 +7,12 @@
           <div class="col-md-3 ms-paper-menu-left-container">
             <div class="ms-paper-menu-left">
               <h3 class="ms-paper-menu-title">
-                          <i class="zmdi zmdi-apps"></i> เมนูแบบประเมิน
-                          <a role="button" data-toggle="collapse" href="#collapseMenu" aria-expanded="false" aria-controls="collapseMenu" class="withripple collapsed">
-                            <i class="zmdi zmdi-menu"></i>
-                            <div class="ripple-container"></div>
-                          </a>
-                        </h3>
+                              <i class="zmdi zmdi-apps"></i> เมนูแบบประเมิน
+                              <a role="button" data-toggle="collapse" href="#collapseMenu" aria-expanded="false" aria-controls="collapseMenu" class="withripple collapsed">
+                                <i class="zmdi zmdi-menu"></i>
+                                <div class="ripple-container"></div>
+                              </a>
+                            </h3>
               <div class="panel-menu collapse" id="collapseMenu" aria-expanded="false" style="height: 0px;">
                 <ul class="panel-group ms-collapse-nav" role="tablist">
                   <li>
@@ -45,7 +45,10 @@ export default {
 </script>
 
 <style lang='scss'>
-.pre-paper-view {
-  min-height: 446px;
+#prepaper {
+  min-height: calc(100vh - 160px);
+  .pre-paper-view {
+    min-height: 492px;
+  }
 }
 </style>

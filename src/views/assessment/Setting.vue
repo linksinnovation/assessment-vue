@@ -15,6 +15,12 @@
           </div>
         </div>
         <div class="form-group">
+          <label for="textArea" class="col-md-2 control-label">วัตถุประสงค์</label>
+          <div class="col-md-10">
+            <textarea class="form-control" rows="5" id="textArea" v-model="data.objective" required></textarea>
+          </div>
+        </div>
+        <div class="form-group">
           <label for="startDate" class="col-md-2 control-label">วันเริ่มต้น</label>
           <div class="col-md-10">
             <input id="startDate" type="text" class="form-control" v-model="data.startDate"> </div>
