@@ -6,6 +6,7 @@
 package co.th.linksinnovation.integrity.repository;
 
 import co.th.linksinnovation.integrity.model.UserDetails;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -13,5 +14,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Jirawong Wongdokpuang <jirawong@linksinnovation.com>
  */
 public interface UserDetailsRepository extends JpaRepository<UserDetails, String>{
+
+    public List<UserDetails> findByNameEnLikeOrNameThLike(String string, String string0);
+
+    public List<UserDetails> findByNameEnIgnoreCaseContaining(String keyword);
+
+    public List<UserDetails> findByNameEnIgnoreCaseContainingOrNameThContaining(String word, String word0);
     
 }

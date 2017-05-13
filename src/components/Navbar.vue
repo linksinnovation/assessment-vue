@@ -19,13 +19,13 @@
                     <div class="ripple-container"></div>
                   </a>
             <ul class="dropdown-menu">
-              <li>
+              <li v-if="authority == 'Administrator'">
                 <router-link :to="{path: '/assessment'}"><i class="zmdi zmdi-view-compact"></i> เพิ่มแบบประเมิน</router-link>
               </li>
-              <li>
-                <a href=""><i class="zmdi zmdi-view-compact"></i> กำหนดสิทธิ์การใช้งาน</a>
+              <li v-if="authority == 'Administrator'">
+                <router-link :to="{path: '/permission'}"><i class="zmdi zmdi-view-compact"></i> กำหนดสิทธิ์การใช้งาน</router-link>
               </li>
-              <li class="divider"></li>
+              <li class="divider" v-if="authority == 'Administrator'"></li>
               <li>
                 <a v-on:click="logout(this)"><i class="zmdi zmdi-view-compact"></i> ออกจากระบบ</a>
               </li>

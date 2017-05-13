@@ -86,6 +86,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 userDetails.setNameEn(postForEntity.getBody().getSuccess().getData().getUserInfo().getFullname().getEn());
                 userDetails.setNameTh(postForEntity.getBody().getSuccess().getData().getUserInfo().getFullname().getTh());
                 userDetails.setUserId(postForEntity.getBody().getSuccess().getData().getUserInfo().getId());
+                userDetails.setPhoto(postForEntity.getBody().getSuccess().getData().getUserInfo().getPhoto());
                 Authority authority = new Authority();
                 authority.setAuthority("User");
                 userDetails.addAuthority(authority);

@@ -2,7 +2,7 @@
   <div id="course">
     <div class="row">
   
-      <div class="col-md-12">
+      <div class="col-md-12" v-if="data.sections.length > 0">
         <video-player :options="playerOptions" @ready="playerReadied"></video-player>
       </div>
   
@@ -42,7 +42,9 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      data: {},
+      data: {
+        sections: []
+      },
       playerOptions: {
         // videojs and plugin options
         sources: [{
@@ -72,7 +74,9 @@ export default {
         .get('/api/assessment/' + this.id)
         .done(function (data) {
           self.$set(self, 'data', data)
-          self.changeCourse(data.sections[0].courses[0])
+          if (data.sections.length > 0) {
+            self.changeCourse(data.sections[0].courses[0])
+          }
         })
     },
     changeCourse: function (course) {

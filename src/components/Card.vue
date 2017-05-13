@@ -3,7 +3,7 @@
     <div class="card animated fadeInUp animation-delay-6">
       <div class="withripple zoom-img">
         <router-link :to="{path: '/assessment/'+props.id+'/assessment'}">
-          <img src="https://agmstudio.io/themes/material-style/1.4/assets/img/demo/port4.jpg" alt="..." class="img-responsive">
+          <img :src="'images/'+props.cover" alt="..." class="img-responsive">
         </router-link>
       </div>
       <div class="card-block">

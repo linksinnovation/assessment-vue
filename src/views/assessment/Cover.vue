@@ -1,21 +1,21 @@
 <template>
   <div id="import-data">
-    <h3>นำเข้าข้อมูล</h3>
+    <h3>ภาพหน้าปก</h3>
     <div class="panel panel-default">
       <div class="panel-body">
   
-        <div class="alert alert-primary alert-light alert-dismissible" role="alert" v-if="data.organizeFile">
-          <i class="zmdi zmdi-notifications"></i> {{data.organizeFile}}
+        <div class="form-group" v-if="data.cover">
+          <img :src="'/images/'+data.cover" style="width: 100%">
         </div>
         <div class="form-group" v-if="files.file">
           <div class="col-md-12">
             <progressUpload :props="files.file" :url="files.url" :course="data.id"></progressUpload>
           </div>
         </div>
-        <div class="form-group" v-if="!data.organizeFile">
+        <div class="form-group" v-if="!files.file">
           <div class="col-md-12 text-center is-fileinput">
-            <input type="file" accept="text/csv" v-on:change="onBrowse('/api/csvupload',$event)">
-            <button type="button" class="btn btn-raised btn-success">นำเข้าข้อมูลผังองค์กร</button>
+            <input type="file" accept="image/gif,image/jpeg,image/png" v-on:change="onBrowse('/api/coverupload',$event)">
+            <button type="button" class="btn btn-raised btn-success">เปลี่ยนภาพหน้าปก</button>
           </div>
         </div>
   
@@ -29,7 +29,7 @@ import http from '@/api/common/http'
 import ProgressUpload from '@/components/ProgressUpload'
 
 export default {
-  name: 'importData',
+  name: 'cover',
   components: {
     ProgressUpload
   },

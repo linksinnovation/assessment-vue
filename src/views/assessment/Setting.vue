@@ -46,7 +46,7 @@
         <div class="form-group">
           <div class="col-md-10 col-md-offset-2">
             <button type="submit" class="btn btn-raised btn-primary">บันทึกแบบประเมิน</button>
-            <button type="submit" class="btn btn-raised btn-primary">ลบแบบประเมิน</button>
+            <button type="submit" class="btn btn-raised btn-primary" v-if="false">ลบแบบประเมิน</button>
           </div>
         </div>
     </form>

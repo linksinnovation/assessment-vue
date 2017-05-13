@@ -14,6 +14,13 @@ import Manage from '@/views/assessment/Manage'
 import ManageCourse from '@/views/assessment/ManageCourse'
 import ImportData from '@/views/assessment/ImportData'
 import Course from '@/views/assessment/Course'
+import Cover from '@/views/assessment/Cover'
+import QrCode from '@/views/assessment/QrCode'
+import Report from '@/views/assessment/Report'
+import Dashboard from '@/views/assessment/Dashboard'
+
+import Permission from '@/views/Permission'
+import PermissionCard from '@/views/permission/PermissionCard.vue'
 
 Vue.use(Router)
 Vue.use(VueResource)
@@ -26,6 +33,13 @@ const router = new Router({
     children: [{
       path: '',
       component: Cardboard
+    }, {
+      path: '/permission',
+      component: Permission,
+      children: [{
+        path: '',
+        component: PermissionCard
+      }]
     }, {
       path: '/assessment',
       component: PrePaper,
@@ -52,17 +66,20 @@ const router = new Router({
         path: 'managecourse',
         component: ManageCourse
       }, {
+        path: 'cover',
+        component: Cover
+      }, {
         path: 'import',
         component: ImportData
       }, {
         path: 'report',
-        component: Setting
+        component: Report
       }, {
         path: 'dashboard',
-        component: Setting
+        component: Dashboard
       }, {
         path: 'qrcode',
-        component: Setting
+        component: QrCode
       }]
     }]
   }, {

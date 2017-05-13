@@ -29,6 +29,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
     private String nameEn;
     private String nameTh;
     private String userId;
+    private String photo;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Authority> authorities;
 

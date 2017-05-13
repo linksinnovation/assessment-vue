@@ -3,10 +3,12 @@ package co.th.linksinnovation.integrity.controller;
 import co.th.linksinnovation.integrity.model.Assessment;
 import co.th.linksinnovation.integrity.model.Course;
 import co.th.linksinnovation.integrity.model.OrganizeData;
+import co.th.linksinnovation.integrity.model.UserDetails;
 import co.th.linksinnovation.integrity.model.enumuration.ContentType;
 import co.th.linksinnovation.integrity.repository.AssessmentRepository;
 import co.th.linksinnovation.integrity.repository.CourseRepository;
 import co.th.linksinnovation.integrity.repository.OrganizeDataRepository;
+import co.th.linksinnovation.integrity.repository.UserDetailsRepository;
 import co.th.linksinnovation.integrity.service.OrganizeDataService;
 import co.th.linksinnovation.integrity.utils.MD5;
 import co.th.linksinnovation.integrity.utils.QualitySelect;
@@ -26,8 +28,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created by Kong on 12/26/2015 AD.
@@ -44,7 +49,9 @@ public class ProgressUploadController {
     private AssessmentRepository assessmentRepository;
     @Autowired
     private OrganizeDataRepository organizeDataRepository;
-    
+    @Autowired
+    private UserDetailsRepository userDetailsRepository;
+
     @Autowired
     private OrganizeDataService organizeDataService;
 
@@ -63,7 +70,7 @@ public class ProgressUploadController {
             course.setUpdateDate(new Date());
             course.setUuid(hexFile);
             course = courseRepository.save(course);
-            
+
             RestTemplate rest = new RestTemplate();
             Map<String, Object> map = new HashMap<>();
             map.put("uuid", hexFile);
@@ -134,6 +141,18 @@ public class ProgressUploadController {
             assessment.getOrganizeDatas().addAll(beans);
             assessmentRepository.save(assessment);
             organizeDataService.calculateOrganizeChart(assessment);
+        }
+    }
+
+        @RequestMapping(value = "/coverupload", method = RequestMethod.PUT)
+    public void coverUpload(@RequestBody byte[] file, HttpServletRequest request) throws UnsupportedEncodingException {
+        InputStream chunk = new ByteArrayInputStream(file);
+        String filename = URLDecoder.decode(request.getHeader("Content-Name"), "UTF-8");
+        appendFile(request.getHeader("Content-Start"), chunk, new File("/mnt/data/images/" + request.getHeader("Content-Lecture") + "-" + filename));
+        if (request.getHeader("Content-End") != null && request.getHeader("Content-End").equals(request.getHeader("Content-FileSize"))) {
+            Assessment assessment = assessmentRepository.findOne(Integer.parseInt(request.getHeader("Content-Lecture")));
+            assessment.setCover(request.getHeader("Content-Lecture") + "-" + filename);
+            assessmentRepository.save(assessment);
         }
     }
 

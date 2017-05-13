@@ -8,6 +8,7 @@ package co.th.linksinnovation.integrity.repository;
 import co.th.linksinnovation.integrity.model.Assessment;
 import co.th.linksinnovation.integrity.model.OrganizeData;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,5 +26,7 @@ public interface OrganizeDataRepository extends JpaRepository<OrganizeData, Long
     
     @Query("select distinct o.organizeName from OrganizeData o where o.assessment = ?1")
     public List<String> selectDistinctOrganize(Assessment assessment);
+
+    public List<OrganizeData> findByUsernameAndAssessment(String toUpperCase, Assessment assessment);
 
 }

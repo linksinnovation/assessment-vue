@@ -31,6 +31,9 @@
                     <router-link :to="{path: '/assessment/'+id+'/managecourse'}" role="button"><i class="fa fa-bars"></i> จัดการสือการสอน</router-link>
                   </li>
                   <li v-if="authority == 'Administrator'">
+                    <router-link :to="{path: '/assessment/'+id+'/cover'}" role="button"><i class="fa fa-bars"></i> ภาพหน้าปก</router-link>
+                  </li>
+                  <li v-if="authority == 'Administrator'">
                     <router-link :to="{path: '/assessment/'+id+'/import'}" role="button"><i class="fa fa-bars"></i> นำเข้าข้อมูล</router-link>
                   </li>
                   <li v-if="authority == 'Administrator'">
@@ -82,7 +85,7 @@ export default {
 #paper {
   min-height: calc(100vh - 160px);
   .paper-view {
-    min-height: 492px;
+    min-height: 538px;
 
     .ms-collapse-nav li a.router-link-active {
       background-color: #03a9f4;

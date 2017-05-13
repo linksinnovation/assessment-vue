@@ -6,8 +6,6 @@
 package co.th.linksinnovation.integrity.service;
 
 import co.th.linksinnovation.integrity.model.Assessment;
-import co.th.linksinnovation.integrity.repository.AssessmentRepository;
-import co.th.linksinnovation.integrity.repository.OrganizeDataRepository;
 import co.th.linksinnovation.integrity.repository.OrganizeSummaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class OrganizeDataService {
     
-    @Autowired
-    private AssessmentRepository assessmentRepository;
-    @Autowired
-    private OrganizeDataRepository organizeDataRepository;
     @Autowired
     private OrganizeSummaryRepository organizeSummaryRepository;
     

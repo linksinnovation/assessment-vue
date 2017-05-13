@@ -45,6 +45,7 @@ public class Assessment {
     @JsonFormat(pattern="dd/MM/yyyy")
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
+    private String cover = "default.jpg";
     @Min(0)
     private Integer repeatTime;
     @Min(0)

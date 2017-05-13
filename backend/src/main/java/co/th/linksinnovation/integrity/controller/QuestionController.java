@@ -14,6 +14,7 @@ import co.th.linksinnovation.integrity.repository.AssessmentRepository;
 import co.th.linksinnovation.integrity.repository.QuestionRepository;
 import co.th.linksinnovation.integrity.repository.UserDetailsRepository;
 import co.th.linksinnovation.integrity.repository.UserQuestionRepository;
+import co.th.linksinnovation.integrity.service.ScoreService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,8 @@ public class QuestionController {
     private UserQuestionRepository userQuestionRepository;
     @Autowired
     private AssessmentRepository assessmentRepository;
+    @Autowired
+    private ScoreService scoreService;
 
     @PostMapping("/{id}")
     public List<UserQuestion> post(@RequestBody List<Map<String, String>> answers, @PathVariable Integer id, @AuthenticationPrincipal String user) {
@@ -70,8 +73,9 @@ public class QuestionController {
         assessmentUser.setAssessment(assessment);
         assessmentUser.setUser(userDetails);
         assessment.addAssessmentUser(assessmentUser);
-        assessmentRepository.save(assessment);
+        Assessment save = assessmentRepository.save(assessment);
         
+        scoreService.calculateLocationScore(userDetails, assessment, assessmentUser);
 
         userQuestions = userQuestionRepository.save(userQuestions);
 

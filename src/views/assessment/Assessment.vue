@@ -24,7 +24,7 @@
           <strong>{{index+1}}. {{question.question}}</strong>
         </div>
         <div class="input-group col-md-11 col-md-offset-1" v-for="(answer,subIndex) in question.answers">
-          <span class="input-group-addon"><input type="radio" :name="'answer-radio-'+index" v-model="answer.checked" :value="subIndex" v-on:click="selected(question.id,subIndex,index)"></span>
+          <span class="input-group-addon"><input type="radio" :name="'answer-radio-'+index" v-on:click="selected(question.id,subIndex,index)"></span>
           <span>{{answer.answer}}</span>
         </div>
         <div class="col-md-12 text-center">
@@ -72,7 +72,8 @@ export default {
       data: {},
       answers: [],
       pass: true,
-      warn: true
+      warn: true,
+      break: false
     }
   },
   created: function () {
@@ -98,14 +99,19 @@ export default {
       this.$set(this, 'number', 0)
     },
     nextAssessment: function () {
+      this.break = false
       this.$set(this, 'number', this.number + 1)
     },
     selected: function (question, select, index) {
-      $('#next-button-' + index).prop('disabled', false)
-      this.answers.push({ question: question, selected: select })
+      if (!this.break) {
+        $('#next-button-' + index).prop('disabled', false)
+        this.answers.push({ question: question, selected: select })
+        this.break = true
+      }
     },
     sendAssessment: function () {
       var self = this
+      this.break = false
       this.$set(this, 'number', this.number + 1)
       http.post('/api/question/' + this.id, this.answers)
         .done(function (data) {
@@ -116,7 +122,8 @@ export default {
               score++
             }
           }
-          if ((score / data.length) * 100 > self.data.passScore) {
+          console.log(score + ' ' + data.length + ' ' + self.data.passScore)
+          if ((score / data.length) * 100 >= self.data.passScore) {
             self.$set(self, 'pass', true)
           } else {
             self.$set(self, 'pass', false)

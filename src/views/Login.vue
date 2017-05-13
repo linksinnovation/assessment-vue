@@ -3,12 +3,10 @@
   <div class="middle-box text-center animated fadeInDown">
     <div>
       <div>
-        <h1 class="logo-name">StockrSubmit</h1>
+        <h1 class="logo-name">INTEGRITY</h1>
       </div>
-      <h3>Welcome to StockrSubmit</h3>
-      <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.</p>
-      <p>Login in. To see it in action.</p>
-      <form class="mt" role="form" v-on:submit.prevent="onSubmit">
+      <h3>ASSESSMENT</h3>
+      <form class="mt" role="form" v-on:submit.prevent="onSubmit" autocomplete="off">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Username" required="" v-model="credentials.username">
         </div>
@@ -16,12 +14,7 @@
           <input type="password" class="form-control" placeholder="Password" required="" v-model="credentials.password">
         </div>
         <button type="submit" class="btn btn-raised btn-primary block full-width mb">Login</button>
-
-        <router-link to="/"><small>Forgot password?</small></router-link>
-        <p class="text-muted text-center"><small>Do not have an account?</small></p>
-        <router-link to="/" class="btn btn-sm btn-white btn-block">Create an account</router-link>
       </form>
-      <p class="mt"> <small>StockrSubmit Distribute and Sell your Photos &copy; 2016</small> </p>
     </div>
   </div>
 </div>
@@ -53,6 +46,8 @@ export default {
     min-height: 100vh;
     color: #676a6c;
     background-color: #f3f3f4;
+    position: absolute;
+    top: 0px;
 
     .middle-box {
         max-width: 300px;
@@ -61,7 +56,7 @@ export default {
         padding-top: 10%;
         h1 {
             &.logo-name {
-                color: #e6e6e6;
+                color: #039BE0;
                 font-size: 35px;
                 font-weight: 800;
                 letter-spacing: -1px;
