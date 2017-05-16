@@ -6,6 +6,7 @@
 package co.th.linksinnovation.integrity.controller;
 
 import co.th.linksinnovation.integrity.model.Assessment;
+import co.th.linksinnovation.integrity.model.AssessmentUser;
 import co.th.linksinnovation.integrity.model.Question;
 import co.th.linksinnovation.integrity.model.UserDetails;
 import co.th.linksinnovation.integrity.repository.AssessmentRepository;
@@ -18,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +50,12 @@ public class AssessmentController {
     private OverviewScoreRepository overviewScoreRepository;
 
     @GetMapping("/{id}")
-    public Assessment get(@PathVariable Integer id) {
-        return assessmentRepository.findOne(id);
+    public Assessment get(@PathVariable Integer id, @AuthenticationPrincipal String username) {
+        UserDetails userDetails = userDetailsRepository.findOne(username);
+        Assessment assessment = assessmentRepository.findOne(id);
+        List<AssessmentUser> assessmentUsers = assessment.getAssessmentUsers().stream().filter(as -> as.getUser().equals(userDetails)).collect(Collectors.toList());
+        assessment.setAssessmentUsers(assessmentUsers);
+        return assessment;
     }
 
     @GetMapping
@@ -58,7 +64,7 @@ public class AssessmentController {
         if (findOne.getAuthorities().get(0).getAuthority().equals("Administrator")) {
             return assessmentRepository.findAll();
         } else {
-            return assessmentRepository.findByStartDateGreaterThanEqualAndEndDateLessThanEqual(new Date(), new Date());
+            return assessmentRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(new Date(), new Date());
         }
     }
 

@@ -7,7 +7,7 @@
   
     <div class="row">
   
-      <div class="form-group"  v-if="number === -1">
+      <div class="form-group" v-if="number === -1">
         <div class="col-md-12">
           {{data.objective}}
         </div>
@@ -32,30 +32,37 @@
           <button type="button" :id="'next-button-'+index" class="btn btn-raised btn-primary" v-on:click="sendAssessment" v-if="number === (data.questions.length-1)" disabled>สิ้นสุดการทำแบบประเมิน</button>
         </div>
       </div>
-    </div>
   
-    <div class="form-group" v-for="(item,index) in answers" v-if="number === data.questions.length">
+      <div class="form-group" v-for="(item,index) in answers" v-if="number === data.questions.length">
   
-      <div class="alert alert-danger alert-light alert-dismissible" role="alert" v-if="index == 0 && !pass">
-        <i class="zmdi zmdi-close-circle"></i> สามารถเรียนรู้เพื่อสร้างความรู้ ความเข้าใจเรื่อง Integrity จาก VDO
-        <router-link :to="{path: '/assessment/'+id+'/course'}">เพียงกดปุ่มนี้</router-link>
-      </div>
-  
-      <div class="col-md-12">
-        <strong>{{index+1}}. {{item.question.question}}</strong>
-      </div>
-      <div class="input-group col-md-11 col-md-offset-1">
-        <div v-for="(answer,subIndex) in item.question.answers">
-          <span style="color:red" v-if="!item.checked && subIndex === item.selected">{{answer.answer}}</span>
-          <span style="color:green" v-if="item.checked && subIndex === item.selected">{{answer.answer}}</span>
+        <div class="alert alert-danger alert-light alert-dismissible" role="alert" v-if="index == 0 && !pass">
+          <i class="zmdi zmdi-close-circle"></i> สามารถเรียนรู้เพื่อสร้างความรู้ ความเข้าใจเรื่อง Integrity จาก VDO
+          <router-link :to="{path: '/assessment/'+id+'/course'}">เพียงกดปุ่มนี้</router-link>
         </div>
-      </div>
-      <div class="col-md-12 text-center" v-if="answers.length === index+1">
-        <button type="button" class="btn btn-raised btn-primary" v-on:click="restartAssessment">เริ่มทำแบบประเมินใหม่</button>
-      </div>
   
+        <div class="alert alert-danger alert-dismissible" role="alert" v-if="index == 0 && !pass">
+          <i class="zmdi zmdi-close-circle"></i> คุณไม่ผ่านแบบประเมิน
+        </div>
+  
+        <div class="alert alert-success alert-dismissible" role="alert" v-if="index == 0 && pass">
+          <i class="zmdi zmdi-check"></i> ยินดีด้วย! คุณผ่านแบบประเมิน
+        </div>
+  
+        <div class="col-md-12">
+          <strong>{{index+1}}. {{item.question.question}}</strong>
+        </div>
+        <div class="input-group col-md-11 col-md-offset-1">
+          <div v-for="(answer,subIndex) in item.question.answers">
+            <span style="color:red" v-if="!item.checked && subIndex === item.selected">{{answer.answer}}</span>
+            <span style="color:green" v-if="item.checked && subIndex === item.selected">{{answer.answer}}</span>
+          </div>
+        </div>
+        <div class="col-md-12 text-center" v-if="answers.length === index+1">
+          <button type="button" class="btn btn-raised btn-primary" v-on:click="restartAssessment">เริ่มทำแบบประเมินใหม่</button>
+        </div>
+  
+      </div>
     </div>
-  
   </div>
 </template>
 
@@ -122,7 +129,6 @@ export default {
               score++
             }
           }
-          console.log(score + ' ' + data.length + ' ' + self.data.passScore)
           if ((score / data.length) * 100 >= self.data.passScore) {
             self.$set(self, 'pass', true)
           } else {

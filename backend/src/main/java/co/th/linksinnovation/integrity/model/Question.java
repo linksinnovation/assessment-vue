@@ -37,7 +37,7 @@ public class Question {
     @ManyToOne
     @JsonBackReference
     private Assessment assessment;
-    @OneToMany(mappedBy = "question",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "question",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<UserQuestion> userQuestions;
 }

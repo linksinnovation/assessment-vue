@@ -16,6 +16,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AssessmentRepository extends JpaRepository<Assessment, Integer>{
 
-    public List<Assessment> findByStartDateGreaterThanEqualAndEndDateLessThanEqual(Date date, Date date0);
+    public List<Assessment> findByStartDateLessThanEqualAndEndDateGreaterThanEqual(Date date, Date date0);
     
 }
