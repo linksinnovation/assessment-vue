@@ -55,4 +55,24 @@ public class OverviewScore {
     
     @ManyToOne
     private Assessment assessment;
+    
+    public OverviewScore incrementDone(){
+        this.orgaizeDone = this.orgaizeDone.add(BigInteger.ONE);
+        this.businessDone = this.businessDone.add(BigInteger.ONE);
+        this.groupDone = this.groupDone.add(BigInteger.ONE);
+        this.fieldDone = this.fieldDone.add(BigInteger.ONE);
+        this.areaDone = this.areaDone.add(BigInteger.ONE);
+        this.partyDone = this.partyDone.add(BigInteger.ONE);
+        return this;
+    }
+    
+    public OverviewScore incrementPass(){
+        this.organizePass = this.organizePass.add(BigInteger.ONE);
+        this.businessPass = this.businessPass.add(BigInteger.ONE);
+        this.groupPass = this.groupPass.add(BigInteger.ONE);
+        this.fieldPass = this.fieldPass.add(BigInteger.ONE);
+        this.areaPass = this.areaPass.add(BigInteger.ONE);
+        this.partyPass = this.partyPass.add(BigInteger.ONE);
+        return this;
+    }
 }
