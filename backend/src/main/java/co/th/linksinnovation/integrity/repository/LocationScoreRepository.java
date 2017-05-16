@@ -9,6 +9,7 @@ import co.th.linksinnovation.integrity.model.Assessment;
 import co.th.linksinnovation.integrity.model.LocationScore;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -19,5 +20,8 @@ public interface LocationScoreRepository extends JpaRepository<LocationScore, In
     public List<LocationScore> findByOrganizeNameAndBusinessNameAndGroupNameAndFieldNameAndAreaNameAndPartyName(String organizeName, String businessName, String groupName, String fieldName, String areaName, String partyName);
 
     public List<LocationScore> findByOrganizeNameAndBusinessNameAndGroupNameAndFieldNameAndAreaNameAndPartyNameAndAssessment(String location, String businessName, String groupName, String fieldName, String areaName, String partyName, Assessment assessment);
+
+    @Transactional
+    public void deleteByAssessment(Assessment assessment);
     
 }

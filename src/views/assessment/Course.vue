@@ -50,7 +50,7 @@ export default {
         sources: [{
           withCredentials: false,
           type: 'application/x-mpegURL',
-          src: 'http://10.1.2.203/8e47bb95738b090baf28d731fa8e3785/720p.m3u8'
+          src: 'http://mpintegrity.mitrphol.com/vdo/8e47bb95738b090baf28d731fa8e3785/720p.m3u8'
         }],
         controlBar: {
           timeDivider: false,
@@ -84,7 +84,7 @@ export default {
         sources: [{
           withCredentials: false,
           type: 'application/x-mpegURL',
-          src: 'http://10.1.2.203/' + course.uuid + '/720p.m3u8'
+          src: 'http://mpintegrity.mitrphol.com/vdo/' + course.uuid + '/720p.m3u8'
         }],
         controlBar: {
           timeDivider: false,

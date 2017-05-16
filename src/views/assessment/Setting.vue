@@ -46,7 +46,7 @@
       <div class="form-group">
         <div class="col-md-10 col-md-offset-2">
           <button type="submit" class="btn btn-raised btn-primary">บันทึกแบบประเมิน</button>
-          <button type="button" class="btn btn-raised btn-primary">ลบแบบประเมิน</button>
+          <button type="button" class="btn btn-raised btn-primary" v-on:click="onDelete">ลบแบบประเมิน</button>
         </div>
       </div>
     </form>
@@ -96,9 +96,9 @@ export default {
           self.$set(self, 'data', data)
         })
     },
-    delete: function () {
-      var self = this
-      http.post('/api/assessment/delete/' + this.id, this.data)
+    onDelete: function () {
+      // var self = this
+      http.delete('/api/assessment/' + this.id)
         .done(function (data) {
           console.log('done.')
         })

@@ -25,5 +25,18 @@ export default {
     }).fail((jqXHR, textStatus, errorThrown) => {
       router.replace('/login')
     })
+  },
+  delete: function (path, data) {
+    return $.ajax({
+      url: path,
+      method: 'DELETE',
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      headers: {
+        Authorization: 'bearer ' + localStorage.getItem('at')
+      }
+    }).fail((jqXHR, textStatus, errorThrown) => {
+      router.replace('/login')
+    })
   }
 }

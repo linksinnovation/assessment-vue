@@ -7,6 +7,7 @@ package co.th.linksinnovation.integrity.repository;
 
 import co.th.linksinnovation.integrity.model.UserQuestion;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 
 /**
  *

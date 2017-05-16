@@ -24,9 +24,8 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping(value = {"{path:(?!oauth|api|assets|error|images|ViewerJS|files|flowplayer|static).*$}", "{path:(?!oauth|api|assets|error|images|ViewerJS|files|flowplayer|static).*$}/**"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"{path:(?!oauth|api|images|files|vdo|static).*$}", "{path:(?!oauth|api|images|files|vdo|static).*$}/**"}, method = RequestMethod.GET)
     public String index(@PathVariable("path") String path, Model model) {
-        System.out.println("hahahaha");
         return "index";
     }
 }

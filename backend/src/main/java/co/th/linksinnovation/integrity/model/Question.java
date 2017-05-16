@@ -6,6 +6,7 @@
 package co.th.linksinnovation.integrity.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -36,4 +37,7 @@ public class Question {
     @ManyToOne
     @JsonBackReference
     private Assessment assessment;
+    @OneToMany(mappedBy = "question",cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonIgnore
+    private List<UserQuestion> userQuestions;
 }

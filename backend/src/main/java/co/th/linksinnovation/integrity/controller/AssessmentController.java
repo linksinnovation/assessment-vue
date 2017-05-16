@@ -6,9 +6,13 @@
 package co.th.linksinnovation.integrity.controller;
 
 import co.th.linksinnovation.integrity.model.Assessment;
+import co.th.linksinnovation.integrity.model.Question;
 import co.th.linksinnovation.integrity.model.UserDetails;
 import co.th.linksinnovation.integrity.repository.AssessmentRepository;
+import co.th.linksinnovation.integrity.repository.LocationScoreRepository;
+import co.th.linksinnovation.integrity.repository.OverviewScoreRepository;
 import co.th.linksinnovation.integrity.repository.UserDetailsRepository;
+import co.th.linksinnovation.integrity.repository.UserQuestionRepository;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,6 +22,7 @@ import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +42,10 @@ public class AssessmentController {
     private AssessmentRepository assessmentRepository;
     @Autowired
     private UserDetailsRepository userDetailsRepository;
+    @Autowired
+    private LocationScoreRepository locationScoreRepository;
+    @Autowired
+    private OverviewScoreRepository overviewScoreRepository;
 
     @GetMapping("/{id}")
     public Assessment get(@PathVariable Integer id) {
@@ -46,20 +55,28 @@ public class AssessmentController {
     @GetMapping
     public List<Assessment> get(@AuthenticationPrincipal String username) {
         UserDetails findOne = userDetailsRepository.findOne(username);
-        if(findOne.getAuthorities().get(0).getAuthority().equals("Administrator")){
+        if (findOne.getAuthorities().get(0).getAuthority().equals("Administrator")) {
             return assessmentRepository.findAll();
-        }else{
-            return assessmentRepository.findByStartDateGreaterThanEqualAndEndDateLessThanEqual(new Date(),new Date());
-        }   
+        } else {
+            return assessmentRepository.findByStartDateGreaterThanEqualAndEndDateLessThanEqual(new Date(), new Date());
+        }
     }
 
     @PostMapping
     public Assessment post(@RequestBody Assessment assessment) throws IOException {
         Assessment save = assessmentRepository.save(assessment);
-        File file = new File("/mnt/data/images/qrcode-"+save.getId()+".jpg");
-        if(!file.exists()){
-            QRCode.from("http://localhost:8000/assessment/"+save.getId()+"/assessment").to(ImageType.JPG).writeTo(new FileOutputStream(file));
+        File file = new File("/mnt/data/images/qrcode-" + save.getId() + ".jpg");
+        if (!file.exists()) {
+            QRCode.from("http://localhost:8000/assessment/" + save.getId() + "/assessment").to(ImageType.JPG).writeTo(new FileOutputStream(file));
         }
         return save;
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Integer id) {
+        Assessment assessment = assessmentRepository.findOne(id);
+        locationScoreRepository.deleteByAssessment(assessment);
+        overviewScoreRepository.deleteByAssessment(assessment);
+        assessmentRepository.delete(id);
     }
 }

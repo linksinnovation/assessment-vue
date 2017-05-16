@@ -9,6 +9,7 @@ import co.th.linksinnovation.integrity.model.Assessment;
 import co.th.linksinnovation.integrity.model.OverviewScore;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -17,5 +18,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface OverviewScoreRepository extends JpaRepository<OverviewScore, Integer>{
 
     public List<OverviewScore> findByOrganizeNameAndBusinessNameAndGroupNameAndFieldNameAndAreaNameAndPartyNameAndAssessment(String location, String businessName, String groupName, String fieldName, String areaName, String partyName, Assessment assessment);
+
+    @Transactional
+    public void deleteByAssessment(Assessment assessment);
     
 }
