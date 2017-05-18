@@ -67,6 +67,7 @@
     "videojs-contrib-hls": "^5.5.1",
     "vue-chartjs": "^2.6.2",
     "vue-loader": "^11.1.4",
+    "vue-pdf": "^1.2.1",
     "vue-style-loader": "^2.0.0",
     "vue-template-compiler": "^2.2.4",
     "vue-video-player": "^3.0.9",

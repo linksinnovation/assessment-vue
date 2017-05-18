@@ -42,6 +42,8 @@ public class Oauth2Config {
         public void configure(HttpSecurity http) throws Exception {
             http
                     .authorizeRequests()
+                    .antMatchers("/api/report/csv/**")
+                    .permitAll()
                     .antMatchers("/api/**")
                     .authenticated()
                     .anyRequest()

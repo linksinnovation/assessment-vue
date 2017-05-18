@@ -3,7 +3,6 @@ package co.th.linksinnovation.integrity.controller;
 import co.th.linksinnovation.integrity.model.Assessment;
 import co.th.linksinnovation.integrity.model.Course;
 import co.th.linksinnovation.integrity.model.OrganizeData;
-import co.th.linksinnovation.integrity.model.UserDetails;
 import co.th.linksinnovation.integrity.model.enumuration.ContentType;
 import co.th.linksinnovation.integrity.repository.AssessmentRepository;
 import co.th.linksinnovation.integrity.repository.CourseRepository;
@@ -28,11 +27,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created by Kong on 12/26/2015 AD.

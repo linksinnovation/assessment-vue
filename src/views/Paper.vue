@@ -7,14 +7,17 @@
           <div class="col-md-3 ms-paper-menu-left-container">
             <div class="ms-paper-menu-left">
               <h3 class="ms-paper-menu-title">
-                                <i class="zmdi zmdi-apps"></i> เมนูแบบประเมิน
-                                <a role="button" data-toggle="collapse" href="#collapseMenu" aria-expanded="false" aria-controls="collapseMenu" class="withripple collapsed">
-                                  <i class="zmdi zmdi-menu"></i>
-                                  <div class="ripple-container"></div>
-                                </a>
-                              </h3>
+                                  <i class="zmdi zmdi-apps"></i> เมนูแบบประเมิน
+                                  <a role="button" data-toggle="collapse" href="#collapseMenu" aria-expanded="false" aria-controls="collapseMenu" class="withripple collapsed">
+                                    <i class="zmdi zmdi-menu"></i>
+                                    <div class="ripple-container"></div>
+                                  </a>
+                                </h3>
               <div class="panel-menu collapse" id="collapseMenu" aria-expanded="false" style="height: 0px;">
                 <ul class="panel-group ms-collapse-nav" role="tablist">
+                  <li>
+                    <router-link :to="{path: '/assessment/'+id+'/dashboard'}" role="button"><i class="fa fa-bars"></i> Dashboard</router-link>
+                  </li>
                   <li>
                     <router-link :to="{path: '/assessment/'+id+'/assessment'}" role="button"><i class="fa fa-bars"></i> แบบประเมิน</router-link>
                   </li>
@@ -38,9 +41,6 @@
                   </li>
                   <li v-if="authority == 'Administrator'">
                     <router-link :to="{path: '/assessment/'+id+'/report'}" role="button"><i class="fa fa-bars"></i> รายงาน</router-link>
-                  </li>
-                  <li v-if="authority == 'Administrator'">
-                    <router-link :to="{path: '/assessment/'+id+'/dashboard'}" role="button"><i class="fa fa-bars"></i> Dashboard</router-link>
                   </li>
                   <li v-if="authority == 'Administrator'">
                     <router-link :to="{path: '/assessment/'+id+'/qrcode'}" role="button"><i class="fa fa-bars"></i> QR Code</router-link>

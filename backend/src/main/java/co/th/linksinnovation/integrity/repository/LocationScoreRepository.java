@@ -23,5 +23,7 @@ public interface LocationScoreRepository extends JpaRepository<LocationScore, In
 
     @Transactional
     public void deleteByAssessment(Assessment assessment);
+
+    public List<LocationScore> findByAssessment(Assessment assessment);
     
 }

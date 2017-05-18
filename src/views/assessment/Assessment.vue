@@ -9,11 +9,11 @@
   
       <div class="form-group" v-if="number === -1">
         <div class="col-md-12">
-          {{data.objective}}
+          <p style="white-space: pre">{{data.objective}}</p>
         </div>
       </div>
   
-      <div class="form-group" v-if="number === -1">
+      <div class="form-group" v-if="number === -1 && data.organizeFile != null">
         <div class="col-md-12 text-center">
           <button type="button" id="start-button" class="btn btn-raised btn-success" v-on:click="startAssessment">เริ่มทำแบบประเมิน</button>
         </div>

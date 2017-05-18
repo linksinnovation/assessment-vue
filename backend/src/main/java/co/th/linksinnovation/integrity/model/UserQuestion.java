@@ -29,4 +29,5 @@ public class UserQuestion {
     private Question question;
     private Integer selected;
     private boolean checked;
+    private Integer assessmentId;
 }

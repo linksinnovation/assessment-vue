@@ -2,8 +2,21 @@
   <div id="course">
     <div class="row">
   
+      <div class="col-md-12 text-center" v-if="data.sections.length > 0 && (data.course.contentType === 'PDF' || data.course.contentType === 'PPT')">
+        <button type="submit" class="btn btn-raised btn-primary" v-on:click="pdfPrev"> &lt;&lt; </button>
+        <span>{{pdfOptions.page}} / {{pdfOptions.numPages}} </span>
+        <button type="submit" class="btn btn-raised btn-primary" v-on:click="pdfNext"> &gt;&gt; </button>
+      </div>
+  
       <div class="col-md-12" v-if="data.sections.length > 0">
-        <video-player :options="playerOptions" @ready="playerReadied"></video-player>
+        <video-player :options="playerOptions" @ready="playerReadied" v-if="data.course.contentType === 'VIDEO'"></video-player>
+        <pdf :page="pdfOptions.page" @numPages="pdfOptions.numPages = $event" :src="pdfOptions.src" v-if="data.course.contentType === 'PDF' || data.course.contentType === 'PPT'"></pdf>
+      </div>
+  
+      <div class="col-md-12 text-center" v-if="data.sections.length > 0 && (data.course.contentType === 'PDF' || data.course.contentType === 'PPT')">
+        <button type="submit" class="btn btn-raised btn-primary" v-on:click="pdfPrev"> &lt;&lt; </button>
+        <span>{{pdfOptions.page}} / {{pdfOptions.numPages}} </span>
+        <button type="submit" class="btn btn-raised btn-primary" v-on:click="pdfNext"> &gt;&gt; </button>
       </div>
   
       <div class="col-md-12" style="margin-bottom: 30px">
@@ -34,16 +47,19 @@
 
 <script>
 import http from '@/api/common/http'
+import pdf from 'vue-pdf'
 
 // hls plugin
-require('videojs-contrib-hls/dist/videojs-contrib-hls')
+import 'videojs-contrib-hls/dist/videojs-contrib-hls.min.js'
+
 export default {
   name: 'course',
   data() {
     return {
       id: this.$route.params.id,
       data: {
-        sections: []
+        sections: [],
+        course: {}
       },
       playerOptions: {
         // videojs and plugin options
@@ -58,8 +74,16 @@ export default {
         },
         flash: { hls: { withCredentials: false } },
         html5: { hls: { withCredentials: false } }
+      },
+      pdfOptions: {
+        src: '/files/1-ฟังก์ชั่นงานระบบ (ก่อน 21-04-2017).pdf',
+        page: 1,
+        numPages: 0
       }
     }
+  },
+  components: {
+    pdf
   },
   created: function () {
     this.fetchData()
@@ -80,25 +104,47 @@ export default {
         })
     },
     changeCourse: function (course) {
-      var options = {
-        sources: [{
-          withCredentials: false,
-          type: 'application/x-mpegURL',
-          src: 'http://mpintegrity.mitrphol.com/vdo/' + course.uuid + '/720p.m3u8'
-        }],
-        controlBar: {
-          timeDivider: false,
-          durationDisplay: false
-        },
-        flash: { hls: { withCredentials: false } },
-        html5: { hls: { withCredentials: false } }
+      if (course.contentType === 'VIDEO') {
+        var playerOptions = {
+          sources: [{
+            withCredentials: false,
+            type: 'application/x-mpegURL',
+            src: 'http://mpintegrity.mitrphol.com/vdo/' + course.uuid + '/720p.m3u8'
+          }],
+          controlBar: {
+            timeDivider: false,
+            durationDisplay: false
+          },
+          flash: { hls: { withCredentials: false } },
+          html5: { hls: { withCredentials: false } }
+        }
+        this.$set(this, 'playerOptions', playerOptions)
+      } else {
+        var pdfOptions = {
+          src: '/files/' + course.id + '-' + course.content,
+          page: 1,
+          numPages: 0
+        }
+        this.$set(this, 'pdfOptions', pdfOptions)
       }
-      this.$set(this, 'playerOptions', options)
+      this.$set(this.data, 'course', course)
     },
     playerReadied(player) {
       player.tech({ IWillNotUseThisInPlugins: true }).hls
       player.tech_.hls.xhr.beforeRequest = function (options) {
         return options
+      }
+    },
+    pdfNext: function () {
+      if (this.pdfOptions.page < this.pdfOptions.numPages) {
+        this.pdfOptions.page++
+        this.$set(this, 'pdfOptions', this.pdfOptions)
+      }
+    },
+    pdfPrev: function () {
+      if (this.pdfOptions.page > 1) {
+        this.pdfOptions.page--
+        this.$set(this, 'pdfOptions', this.pdfOptions)
       }
     }
   }

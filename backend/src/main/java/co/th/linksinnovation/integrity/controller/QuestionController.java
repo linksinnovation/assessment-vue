@@ -61,6 +61,7 @@ public class QuestionController {
             userQuestion.setUser(userDetails);
             userQuestion.setSelected(Integer.parseInt(map.get("selected")));
             userQuestion.setChecked(question.getChecked().equals(Integer.parseInt(map.get("selected"))));
+            userQuestion.setAssessmentId(assessment.getId());
             userQuestions.add(userQuestion);
             if (question.getChecked().equals(Integer.parseInt(map.get("selected")))) {
                 score++;

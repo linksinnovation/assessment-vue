@@ -17,8 +17,10 @@ import co.th.linksinnovation.integrity.repository.UserQuestionRepository;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
@@ -55,6 +57,9 @@ public class AssessmentController {
         Assessment assessment = assessmentRepository.findOne(id);
         List<AssessmentUser> assessmentUsers = assessment.getAssessmentUsers().stream().filter(as -> as.getUser().equals(userDetails)).collect(Collectors.toList());
         assessment.setAssessmentUsers(assessmentUsers);
+        
+        Collections.shuffle(assessment.getQuestions(),new Random(System.nanoTime()));
+        
         return assessment;
     }
 
