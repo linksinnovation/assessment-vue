@@ -68,6 +68,8 @@ public class Assessment {
     @OrderBy("id DESC")
     @JsonManagedReference
     private List<AssessmentUser> assessmentUsers;
+    private boolean showResult = false;
+    private boolean enable = true;
     
     public void addAssessmentUser(AssessmentUser assessmentUser){
         if(this.assessmentUsers.isEmpty()){

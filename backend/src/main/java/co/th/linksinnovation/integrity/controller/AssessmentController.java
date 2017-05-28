@@ -7,13 +7,11 @@ package co.th.linksinnovation.integrity.controller;
 
 import co.th.linksinnovation.integrity.model.Assessment;
 import co.th.linksinnovation.integrity.model.AssessmentUser;
-import co.th.linksinnovation.integrity.model.Question;
 import co.th.linksinnovation.integrity.model.UserDetails;
 import co.th.linksinnovation.integrity.repository.AssessmentRepository;
 import co.th.linksinnovation.integrity.repository.LocationScoreRepository;
 import co.th.linksinnovation.integrity.repository.OverviewScoreRepository;
 import co.th.linksinnovation.integrity.repository.UserDetailsRepository;
-import co.th.linksinnovation.integrity.repository.UserQuestionRepository;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -57,9 +55,9 @@ public class AssessmentController {
         Assessment assessment = assessmentRepository.findOne(id);
         List<AssessmentUser> assessmentUsers = assessment.getAssessmentUsers().stream().filter(as -> as.getUser().equals(userDetails)).collect(Collectors.toList());
         assessment.setAssessmentUsers(assessmentUsers);
-        
-        Collections.shuffle(assessment.getQuestions(),new Random(System.nanoTime()));
-        
+
+        Collections.shuffle(assessment.getQuestions(), new Random(System.nanoTime()));
+
         return assessment;
     }
 
@@ -67,18 +65,22 @@ public class AssessmentController {
     public List<Assessment> get(@AuthenticationPrincipal String username) {
         UserDetails findOne = userDetailsRepository.findOne(username);
         if (findOne.getAuthorities().get(0).getAuthority().equals("Administrator")) {
-            return assessmentRepository.findAll();
+            return assessmentRepository.findByEnableIsTrue();
         } else {
-            return assessmentRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(new Date(), new Date());
+            return assessmentRepository.findByEnableIsTrueAndStartDateLessThanEqualAndEndDateGreaterThanEqual(new Date(), new Date());
         }
     }
 
     @PostMapping
     public Assessment post(@RequestBody Assessment assessment) throws IOException {
+        if (assessment.getId() != null) {
+            Assessment load = assessmentRepository.findOne(assessment.getId());
+            assessment.setAssessmentUsers(load.getAssessmentUsers());
+        }
         Assessment save = assessmentRepository.save(assessment);
         File file = new File("/mnt/data/images/qrcode-" + save.getId() + ".jpg");
         if (!file.exists()) {
-            QRCode.from("http://localhost:8000/assessment/" + save.getId() + "/assessment").to(ImageType.JPG).writeTo(new FileOutputStream(file));
+            QRCode.from("http://mpintegrity.mitrphol.com/assessment/" + save.getId() + "/assessment").to(ImageType.JPG).writeTo(new FileOutputStream(file));
         }
         return save;
     }
@@ -86,8 +88,7 @@ public class AssessmentController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         Assessment assessment = assessmentRepository.findOne(id);
-        locationScoreRepository.deleteByAssessment(assessment);
-        overviewScoreRepository.deleteByAssessment(assessment);
-        assessmentRepository.delete(id);
+        assessment.setEnable(false);
+        assessmentRepository.save(assessment);
     }
 }

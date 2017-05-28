@@ -15,18 +15,22 @@ import co.th.linksinnovation.integrity.utils.mediainfo.MediaInfo;
 import co.th.linksinnovation.integrity.utils.mediainfo.MediaInfoUtil;
 import co.th.linksinnovation.integrity.utils.ppt2pdf.Ppt2Pdf;
 import com.itextpdf.text.DocumentException;
-import com.univocity.parsers.common.processor.BeanListProcessor;
-import com.univocity.parsers.csv.CsvParser;
-import com.univocity.parsers.csv.CsvParserSettings;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
@@ -107,40 +111,79 @@ public class ProgressUploadController {
     }
 
     @RequestMapping(value = "/csvupload", method = RequestMethod.PUT)
-    public void csvUpload(@RequestBody byte[] file, HttpServletRequest request) throws UnsupportedEncodingException, IOException, DocumentException {
+    public void csvUpload(@RequestBody byte[] file, HttpServletRequest request) throws UnsupportedEncodingException, FileNotFoundException, IOException {
         InputStream chunk = new ByteArrayInputStream(file);
         String filename = URLDecoder.decode(request.getHeader("Content-Name"), "UTF-8");
         appendFile(request.getHeader("Content-Start"), chunk, new File("/mnt/data/files/" + request.getHeader("Content-Lecture") + "-" + filename));
         if (request.getHeader("Content-End") != null && request.getHeader("Content-End").equals(request.getHeader("Content-FileSize"))) {
-            BeanListProcessor<OrganizeData> rowProcessor = new BeanListProcessor<>(OrganizeData.class);
 
-            CsvParserSettings parserSettings = new CsvParserSettings();
-            parserSettings.setRowProcessor(rowProcessor);
-            parserSettings.setNullValue("");
-            parserSettings.setHeaderExtractionEnabled(true);
+            List<OrganizeData> organizeDatas;
+            try (FileInputStream inputStream = new FileInputStream(new File("/mnt/data/files/" + request.getHeader("Content-Lecture") + "-" + filename))) {
+                Workbook workbook = new XSSFWorkbook(inputStream);
+                Sheet firstSheet = workbook.getSheetAt(0);
+                Iterator<Row> iterator = firstSheet.iterator();
+                organizeDatas = new ArrayList<>();
+                while (iterator.hasNext()) {
+                    Row nextRow = iterator.next();
 
-            CsvParser parser = new CsvParser(parserSettings);
-            parser.parse(new File("/mnt/data/files/" + request.getHeader("Content-Lecture") + "-" + filename));
+//                    Iterator<Cell> cellIterator = nextRow.cellIterator();
+//                    while (cellIterator.hasNext()) {
+//                        Cell cell = cellIterator.next();
+//                        System.out.println(cell.getColumnIndex() + " - " + cell.getStringCellValue());
+//                    }
+//                    if(nextRow.getRowNum() == 1){
+//                        return;
+//                    }
+                    
+                    if (nextRow.getRowNum() == 0) {
+                        if (nextRow.getCell(58).getStringCellValue().equals("User_name")) {
+                            continue;
+                        } else {
+                            return;
+                        }
+                    }else if(nextRow.getCell(58).getStringCellValue().equals("")){
+                        continue;
+                    }
 
-            List<OrganizeData> beans = rowProcessor.getBeans();
+                    OrganizeData organizeData = new OrganizeData();
+                    organizeData.setOrganizeId(nextRow.getCell(7).getStringCellValue());
+                    organizeData.setOrganizeName(nextRow.getCell(8).getStringCellValue());
+                    organizeData.setBusinessId(nextRow.getCell(10).getStringCellValue());
+                    organizeData.setBusinessName(nextRow.getCell(11).getStringCellValue());
+                    organizeData.setGroupId(nextRow.getCell(13).getStringCellValue());
+                    organizeData.setGroupName(nextRow.getCell(14).getStringCellValue());
+                    organizeData.setFieldId(nextRow.getCell(16).getStringCellValue());
+                    organizeData.setFieldName(nextRow.getCell(17).getStringCellValue());
+                    organizeData.setAreaId(nextRow.getCell(19).getStringCellValue());
+                    organizeData.setAreaName(nextRow.getCell(20).getStringCellValue());
+                    organizeData.setPartyId(nextRow.getCell(22).getStringCellValue());
+                    organizeData.setPartyName(nextRow.getCell(23).getStringCellValue());
+                    organizeData.setLocation(nextRow.getCell(52).getStringCellValue());
+                    organizeData.setUsername(nextRow.getCell(58).getStringCellValue());
+                    organizeData.setEmployeeId(nextRow.getCell(0).getStringCellValue());
+                    organizeDatas.add(organizeData);
+                }
+
+                workbook.close();
+            }
 
             Assessment assessment = assessmentRepository.findOne(Integer.parseInt(request.getHeader("Content-Lecture")));
             organizeDataRepository.removeByAssessment(assessment);
 
-            for (OrganizeData org : beans) {
+            for (OrganizeData org : organizeDatas) {
                 org.setAssessment(assessment);
             }
 
             assessment = assessmentRepository.findOne(Integer.parseInt(request.getHeader("Content-Lecture")));
             assessment.setOrganizeFile(filename);
             assessment.getOrganizeDatas().clear();
-            assessment.getOrganizeDatas().addAll(beans);
+            assessment.getOrganizeDatas().addAll(organizeDatas);
             assessmentRepository.save(assessment);
             organizeDataService.calculateOrganizeChart(assessment);
         }
     }
 
-        @RequestMapping(value = "/coverupload", method = RequestMethod.PUT)
+    @RequestMapping(value = "/coverupload", method = RequestMethod.PUT)
     public void coverUpload(@RequestBody byte[] file, HttpServletRequest request) throws UnsupportedEncodingException {
         InputStream chunk = new ByteArrayInputStream(file);
         String filename = URLDecoder.decode(request.getHeader("Content-Name"), "UTF-8");

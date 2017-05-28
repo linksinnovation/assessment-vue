@@ -76,7 +76,7 @@ public class QuestionController {
         assessment.addAssessmentUser(assessmentUser);
         Assessment save = assessmentRepository.save(assessment);
         
-        scoreService.calculateLocationScore(userDetails, assessment, assessmentUser);
+        scoreService.calculateLocationScore(userDetails, save, assessmentUser);
 
         userQuestions = userQuestionRepository.save(userQuestions);
 

@@ -14,12 +14,12 @@
           <textarea class="form-control" rows="5" id="textArea" v-model="data.detail" required></textarea>
         </div>
       </div>
-        <div class="form-group">
-          <label for="textArea" class="col-md-2 control-label">วัตถุประสงค์</label>
-          <div class="col-md-10">
-            <textarea class="form-control" rows="5" id="textArea" v-model="data.objective" required></textarea>
-          </div>
+      <div class="form-group">
+        <label for="textArea" class="col-md-2 control-label">วัตถุประสงค์</label>
+        <div class="col-md-10">
+          <textarea class="form-control" rows="5" id="textArea" v-model="data.objective" required></textarea>
         </div>
+      </div>
       <div class="form-group">
         <label for="startDate" class="col-md-2 control-label">วันเริ่มต้น</label>
         <div class="col-md-10">
@@ -40,6 +40,14 @@
         <label for="passscore" class="col-md-2 control-label">เกณฑ์การผ่าน</label>
         <div class="col-md-10">
           <input type="number" min="0" max="100" class="form-control" id="passscore" v-model="data.passScore">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-10 col-md-offset-2">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" v-model="data.showResult"><span class="checkbox-material"><span class="check"></span></span> แสดงผลการทำแบบประเมิน </label>
+          </div>
         </div>
       </div>
   

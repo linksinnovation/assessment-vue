@@ -14,7 +14,7 @@
         </div>
         <div class="form-group" v-if="!data.organizeFile">
           <div class="col-md-12 text-center is-fileinput">
-            <input type="file" accept="text/csv" v-on:change="onBrowse('/api/csvupload',$event)">
+            <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" v-on:change="onBrowse('/api/csvupload',$event)">
             <button type="button" class="btn btn-raised btn-success">นำเข้าข้อมูลผังองค์กร</button>
           </div>
         </div>

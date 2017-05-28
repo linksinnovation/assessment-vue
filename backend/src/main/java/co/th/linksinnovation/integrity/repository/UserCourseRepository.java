@@ -5,17 +5,13 @@
  */
 package co.th.linksinnovation.integrity.repository;
 
-import co.th.linksinnovation.integrity.model.Assessment;
-import co.th.linksinnovation.integrity.model.Question;
-import java.util.List;
+import co.th.linksinnovation.integrity.model.UserCourse;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author Jirawong Wongdokpuang <jirawong@linksinnovation.com>
  */
-public interface QuestionRepository extends JpaRepository<Question, Integer>{
-
-    public List<Question> findByAssessment(Assessment assessment);
+public interface UserCourseRepository extends JpaRepository<UserCourse, Long>{
     
 }

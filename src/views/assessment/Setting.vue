@@ -42,6 +42,14 @@
           <input type="number" min="0" max="100" class="form-control" id="passscore" v-model="data.passScore">
         </div>
       </div>
+      <div class="form-group">
+        <div class="col-md-10 col-md-offset-2">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" v-model="data.showResult"><span class="checkbox-material"><span class="check"></span></span> แสดงผลการทำแบบประเมิน </label>
+          </div>
+        </div>
+      </div>
   
       <div class="form-group">
         <div class="col-md-10 col-md-offset-2">
@@ -97,10 +105,10 @@ export default {
         })
     },
     onDelete: function () {
-      // var self = this
+      var self = this
       http.delete('/api/assessment/' + this.id)
         .done(function (data) {
-          console.log('done.')
+          self.$router.push({ path: '/' })
         })
     }
 

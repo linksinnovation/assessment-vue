@@ -1,5 +1,5 @@
 <template>
-  <div id="assessment">
+  <div id="assessment" v-if="data != null">
   
     <div class="alert alert-danger alert-light alert-dismissible" role="alert" v-if="number === -1 && !warn">
       <i class="zmdi zmdi-close-circle"></i> คุณทำแบบทดสอบครบจำนวนในการทำซ้ำ
@@ -9,22 +9,23 @@
   
       <div class="form-group" v-if="number === -1">
         <div class="col-md-12">
-          <p style="white-space: pre">{{data.objective}}</p>
+          <p style="white-space: pre-wrap">{{data.objective}}</p>
         </div>
       </div>
   
       <div class="form-group" v-if="number === -1 && data.organizeFile != null">
         <div class="col-md-12 text-center">
-          <button type="button" id="start-button" class="btn btn-raised btn-success" v-on:click="startAssessment">เริ่มทำแบบประเมิน</button>
+          <button type="button" id="start-button" class="btn btn-raised btn-success" v-on:click="startAssessment" v-if="warn">เริ่มทำแบบประเมิน</button>
+          <button type="button" id="start-button" class="btn btn-raised btn-success" v-on:click="startAssessment" v-if="!warn" disabled>เริ่มทำแบบประเมิน</button>
         </div>
       </div>
   
       <div class="form-group" v-for="(question,index) in data.questions" v-if="index === number">
-        <div class="col-md-12">
+        <div class="col-md-12" style="padding-bottom: 20px">
           <strong>{{index+1}}. {{question.question}}</strong>
         </div>
         <div class="input-group col-md-11 col-md-offset-1" v-for="(answer,subIndex) in question.answers">
-          <span class="input-group-addon"><input type="radio" :name="'answer-radio-'+index" v-on:click="selected(question.id,subIndex,index)"></span>
+          <span class="input-group-addon" style="vertical-align: top"><input type="radio" :name="'answer-radio-'+index" v-on:click="selected(question.id,subIndex,index)"></span>
           <span>{{answer.answer}}</span>
         </div>
         <div class="col-md-12 text-center">
@@ -33,8 +34,25 @@
         </div>
       </div>
   
-      <div class="form-group" v-for="(item,index) in answers" v-if="number === data.questions.length">
+      <div class="form-group" v-if="number === data.questions.length && !data.showResult">
+        <div class="alert alert-danger alert-light alert-dismissible" role="alert" v-if="!pass">
+          <i class="zmdi zmdi-close-circle"></i> สามารถเรียนรู้เพื่อสร้างความรู้ ความเข้าใจเรื่อง Integrity จาก VDO
+          <router-link :to="{path: '/assessment/'+id+'/course'}">เพียงกดปุ่มนี้</router-link>
+        </div>
   
+        <div class="alert alert-danger alert-dismissible" role="alert" v-if="!pass">
+          <i class="zmdi zmdi-close-circle"></i> คุณไม่ผ่านแบบประเมิน
+        </div>
+  
+        <div class="alert alert-success alert-dismissible" role="alert" v-if="pass">
+          <i class="zmdi zmdi-check"></i> ยินดีด้วย! คุณผ่านแบบประเมิน
+        </div>
+        <div class="col-md-12 text-center">
+          <button type="button" class="btn btn-raised btn-primary" v-on:click="restartAssessment">เริ่มทำแบบประเมินใหม่</button>
+        </div>
+      </div>
+  
+      <div class="form-group" v-for="(item,index) in answers" v-if="number === data.questions.length && data.showResult">
         <div class="alert alert-danger alert-light alert-dismissible" role="alert" v-if="index == 0 && !pass">
           <i class="zmdi zmdi-close-circle"></i> สามารถเรียนรู้เพื่อสร้างความรู้ ความเข้าใจเรื่อง Integrity จาก VDO
           <router-link :to="{path: '/assessment/'+id+'/course'}">เพียงกดปุ่มนี้</router-link>
@@ -60,8 +78,8 @@
         <div class="col-md-12 text-center" v-if="answers.length === index+1">
           <button type="button" class="btn btn-raised btn-primary" v-on:click="restartAssessment">เริ่มทำแบบประเมินใหม่</button>
         </div>
-  
       </div>
+  
     </div>
   </div>
 </template>
@@ -76,7 +94,7 @@ export default {
     return {
       id: this.$route.params.id,
       number: -1,
-      data: {},
+      data: null,
       answers: [],
       pass: true,
       warn: true,
@@ -96,7 +114,6 @@ export default {
         .get('/api/assessment/' + this.id)
         .done(function (data) {
           if (data.assessmentUsers.length >= data.repeatTime && data.repeatTime !== 0) {
-            $('#start-button').prop('disabled', true)
             self.$set(self, 'warn', false)
           }
           self.$set(self, 'data', data)

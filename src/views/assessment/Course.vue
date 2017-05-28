@@ -8,10 +8,15 @@
         <button type="submit" class="btn btn-raised btn-primary" v-on:click="pdfNext"> &gt;&gt; </button>
       </div>
   
-      <div class="col-md-12" v-if="data.sections.length > 0">
-        <video-player :options="playerOptions" @ready="playerReadied" v-if="data.course.contentType === 'VIDEO'"></video-player>
-        <pdf :page="pdfOptions.page" @numPages="pdfOptions.numPages = $event" :src="pdfOptions.src" v-if="data.course.contentType === 'PDF' || data.course.contentType === 'PPT'"></pdf>
+      <div class="col-md-12" v-if="data.sections.length > 0 && data.course.contentType === 'VIDEO'">
+        <video-player :options="playerOptions" @ready="playerReadied" @ended="onPlayerEnded($event)"></video-player>
       </div>
+  
+      <div class="col-md-1" v-if="data.sections.length > 0 && (data.course.contentType === 'PDF' || data.course.contentType === 'PPT')"></div>
+      <div class="col-md-10" v-if="data.sections.length > 0 && (data.course.contentType === 'PDF' || data.course.contentType === 'PPT')">
+        <pdf :page="pdfOptions.page" @numPages="pdfOptions.numPages = $event" :src="pdfOptions.src" v-if=""></pdf>
+      </div>
+      <div class="col-md-1" v-if="data.sections.length > 0 && (data.course.contentType === 'PDF' || data.course.contentType === 'PPT')"></div>
   
       <div class="col-md-12 text-center" v-if="data.sections.length > 0 && (data.course.contentType === 'PDF' || data.course.contentType === 'PPT')">
         <button type="submit" class="btn btn-raised btn-primary" v-on:click="pdfPrev"> &lt;&lt; </button>
@@ -135,10 +140,16 @@ export default {
         return options
       }
     },
+    onPlayerEnded(e) {
+      this.complete()
+    },
     pdfNext: function () {
       if (this.pdfOptions.page < this.pdfOptions.numPages) {
         this.pdfOptions.page++
         this.$set(this, 'pdfOptions', this.pdfOptions)
+      }
+      if (this.pdfOptions.page === this.pdfOptions.numPages) {
+        this.complete()
       }
     },
     pdfPrev: function () {
@@ -146,7 +157,21 @@ export default {
         this.pdfOptions.page--
         this.$set(this, 'pdfOptions', this.pdfOptions)
       }
+    },
+    complete: function () {
+      http.get('/api/course/' + this.id + '/' + this.data.course.id)
+        .done(function (data) {
+          console.log(data)
+        })
     }
   }
 }
 </script>
+
+<style lang="scss">
+#course {
+  #collapseMenu {
+    display: block
+  }
+}
+</style>

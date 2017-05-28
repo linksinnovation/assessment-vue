@@ -10,9 +10,16 @@ import co.th.linksinnovation.integrity.model.LocationScore;
 import co.th.linksinnovation.integrity.repository.AssessmentRepository;
 import co.th.linksinnovation.integrity.repository.LocationScoreRepository;
 import co.th.linksinnovation.integrity.repository.ReportRepository;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,18 +51,22 @@ public class ReportController {
     }
 
     @GetMapping("/csv/{id}")
-    public ResponseEntity<byte[]> getReport(@PathVariable Integer id) throws UnsupportedEncodingException {
+    public void getReport(@PathVariable Integer id, HttpServletResponse response) throws UnsupportedEncodingException, IOException {
         Assessment assessment = assessmentRepository.findOne(id);
         String report = reportRepository.getReport(assessment);
 
-        byte[] output = report.getBytes("UTF-8");
+//        byte[] output = report.getBytes("UTF-8");
+//
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        responseHeaders.set("charset", "UTF-8");
+//        responseHeaders.setContentType(MediaType.valueOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+//        responseHeaders.setContentLength(report.contentLength());
+//        responseHeaders.set("Content-disposition", "attachment; filename=report.xlsx");
+        
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.addHeader("Content-Disposition", "attachment; filename=report.xlsx");
+        Files.copy(Paths.get(report), response.getOutputStream());
+        response.getOutputStream().flush();
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("charset", "UTF-8");
-        responseHeaders.setContentType(MediaType.valueOf("text/html"));
-        responseHeaders.setContentLength(output.length);
-        responseHeaders.set("Content-disposition", "attachment; filename=report.csv");
-
-        return new ResponseEntity<byte[]>(output, responseHeaders, HttpStatus.OK);
     }
 }
