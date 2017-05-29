@@ -63,7 +63,7 @@ public class ReportRepository {
         }
         header.createCell(questionIndex + 7).setCellValue("สรุปผลการทำแบบทดสอบ");
 
-        resultList.stream().forEach((o) -> {
+        for(Object[] o : resultList) {
             XSSFRow row = sheet.createRow(rownum);
             row.createCell(0).setCellValue(o[1].toString());
             row.createCell(1).setCellValue(o[2].toString());
@@ -84,7 +84,8 @@ public class ReportRepository {
                 cellnum++;
             }
             row.createCell(cellnum).setCellValue(o[9].toString().toUpperCase());
-        });
+            rownum++;
+        }
 
         String filename = "/mnt/data/files/report-" + assessment.getId() + ".xlsx";
 
