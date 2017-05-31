@@ -66,10 +66,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            headers.add("App-Key", "blySsonddG3ZDLU1d2V9hCEUyKt09iDdCKrndyFxAewAY4ny6xU4OOprDoJl5IWa.IqK3VvSVoQ6O4vt3-0kxA");
+            headers.add("App-Key", "pap9DekzlVROhBplLVpx94Yk158w.RbNC8PRH5X3Kkju3JLnMu7m1JC70zhjZP6R8BFP-cINqY-t.8oS6lJbyw");
 
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.add("username", authentication.getName());
+            map.add("username", authentication.getName().toLowerCase());
             map.add("password", authentication.getCredentials().toString());
             
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);

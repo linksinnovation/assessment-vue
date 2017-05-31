@@ -28,7 +28,7 @@ public class ChartDataRepository {
     public List<ChartData> getLocation(Integer assessment, Map<String, String> request) {
         String queryString = "";
         String selectString = "SELECT distinct";
-        String sumString = ",sum(orgaize_done),sum(organize_pass)";
+        String sumString = ",sum(organize_done),sum(organize_pass)";
         String fromString = "";
         if (request.get("view").equals("location")) {
             fromString = " FROM assessment.location_score where assessment_id=:assessment";

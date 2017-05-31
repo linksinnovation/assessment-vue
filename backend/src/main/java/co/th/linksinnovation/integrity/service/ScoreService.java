@@ -67,7 +67,7 @@ public class ScoreService {
                 System.out.println(assessment.getAssessmentUsers().size());
                 if (assessment.getAssessmentUsers().size() == 1) {
                     overviewScore = overviewScore.incrementDone();
-                    System.out.println(overviewScore.getOrgaizeDone());
+                    System.out.println(overviewScore.getOrganizeDone());
                 }
                 int score = 0;
                 for (AssessmentUser au : assessment.getAssessmentUsers()) {

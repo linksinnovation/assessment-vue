@@ -26,7 +26,7 @@ public class OverviewScore {
     private String organizeName;
     private BigInteger organizeTotal = BigInteger.ZERO;
     private BigInteger organizePass = BigInteger.ZERO;
-    private BigInteger orgaizeDone = BigInteger.ZERO;
+    private BigInteger organizeDone = BigInteger.ZERO;
     
     private String businessName;
     private BigInteger businessTotal = BigInteger.ZERO;
@@ -57,7 +57,7 @@ public class OverviewScore {
     private Assessment assessment;
     
     public OverviewScore incrementDone(){
-        this.orgaizeDone = this.orgaizeDone.add(BigInteger.ONE);
+        this.organizeDone = this.organizeDone.add(BigInteger.ONE);
         this.businessDone = this.businessDone.add(BigInteger.ONE);
         this.groupDone = this.groupDone.add(BigInteger.ONE);
         this.fieldDone = this.fieldDone.add(BigInteger.ONE);

@@ -22,7 +22,7 @@
           </select>
         </div>
       </div>
-
+  
       <div class="form-group" v-if="selector.view != '' && selector.view == 'overview'">
         <label class="col-md-2 control-label">ภาพรวม</label>
         <div class="col-md-10">
@@ -65,8 +65,47 @@
   
     </form>
   
-    <barChart :chartData="doneChart" v-if="doneChart != null && selector.view != ''"></barChart>
-    <barChart :chartData="passChart" v-if="passChart != null && selector.view != ''"></barChart>
+    <div class="row">
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="panel panel panel-info panel-dark text-center">
+          <div class="panel-body">
+            <h2 class="counter">{{sumChart.total}}</h2>
+            <i class="fa fa-4x fa-group"></i>
+            <p class="mt-2">ทั้งหมด</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="panel panel panel-warning panel-dark text-center">
+          <div class="panel-body">
+            <h2 class="counter">{{sumChart.done}}</h2>
+            <i class="fa fa-4x fa-file-text"></i>
+            <p class="mt-2">ทำแบบทดสอบ</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="panel panel panel-success panel-dark text-center">
+          <div class="panel-body">
+            <h2 class="counter">{{sumChart.pass}}</h2>
+            <i class="fa fa-4x fa-check-square-o"></i>
+            <p class="mt-2">ผ่านแบบทดสอบ</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="panel panel panel-danger panel-dark text-center">
+          <div class="panel-body">
+            <h2 class="counter">{{sumChart.notpass}}</h2>
+            <i class="fa fa-4x fa-times-circle-o"></i>
+            <p class="mt-2">ไม่ผ่านแบบทดสอบ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <barChart title="จำนวนผู้ทำแบบทดสอบ" :chartData="doneChart" v-if="doneChart != null && selector.view != ''"></barChart>
+    <barChart title="จำนวนผู้ผ่านแบบทดสอบ" :chartData="passChart" v-if="passChart != null && selector.view != ''"></barChart>
   </div>
 </template>
 
@@ -84,6 +123,12 @@ export default {
       id: this.$route.params.id,
       doneChart: null,
       passChart: null,
+      sumChart: {
+        total: 0,
+        done: 0,
+        pass: 0,
+        notpass: 0
+      },
       selection: {
         organize: [],
         business: [],
@@ -99,7 +144,30 @@ export default {
       }
     }
   },
+  created: function () {
+    this.initData()
+  },
+  watch: {
+    '$route': 'initData'
+  },
   methods: {
+    initData: function () {
+      var self = this
+      var selector = {
+        view: 'overview',
+        organize: '',
+        business: '',
+        group: '',
+        area: ''
+      }
+      self.$set(self, 'selector', selector)
+      http
+        .post('/api/dashboard/location/' + this.id, selector)
+        .done(function (data) {
+          self.$set(self.selection, 'organize', data)
+          self.calculateChart(data)
+        })
+    },
     fetchData: function (select) {
       var self = this
       var selector = {}
@@ -187,21 +255,46 @@ export default {
     calculateChart: function (data) {
       var label = []
       var doneChartScore = []
+      var doneChartTotal = []
       var passChartScore = []
+      var passChartTotal = []
+
+      this.sumChart = {
+        total: 0,
+        done: 0,
+        pass: 0,
+        notpass: 0
+      }
+
       for (var i = 0; i < data.length; i++) {
         label.push(data[i].name)
-        doneChartScore.push(((data[i].done / data[i].total) * 100).toFixed(2))
-        passChartScore.push(((data[i].pass / data[i].total) * 100).toFixed(2))
+        // doneChartScore.push(((data[i].done / data[i].total) * 100).toFixed(2))
+        // passChartScore.push(((data[i].pass / data[i].total) * 100).toFixed(2))
+        doneChartScore.push(data[i].done)
+        doneChartTotal.push(data[i].total)
+        passChartScore.push(data[i].pass)
+        passChartTotal.push(data[i].done)
+
+        this.sumChart.total += data[i].total
+        this.sumChart.done += data[i].done
+        this.sumChart.pass += data[i].pass
+        this.sumChart.notpass += (data[i].done - data[i].pass)
       }
 
       var doneChart = {
         labels: label,
         datasets: [
           {
-            label: 'สัดส่วนการเข้ามาทำแบบทดสอบ',
-            backgroundColor: '#f87979',
+            label: 'ผู้เข้ามาทำแบบทดสอบ',
+            backgroundColor: '#4CAF50',
             borderWidth: 1,
             data: doneChartScore
+          },
+          {
+            label: 'ทั้งหมด',
+            backgroundColor: '#f87979',
+            borderWidth: 1,
+            data: doneChartTotal
           }
         ]
       }
@@ -210,16 +303,23 @@ export default {
         labels: label,
         datasets: [
           {
-            label: 'สัดส่วนการทำแบบทดสอบผ่าน',
-            backgroundColor: '#f87979',
+            label: 'ผู้ผ่านแบบทดสอบ',
+            backgroundColor: '#4CAF50',
             borderWidth: 1,
             data: passChartScore
+          },
+          {
+            label: 'ทั้งหมด',
+            backgroundColor: '#f87979',
+            borderWidth: 1,
+            data: passChartTotal
           }
         ]
       }
 
       this.$set(this, 'doneChart', doneChart)
       this.$set(this, 'passChart', passChart)
+      this.$set(this, 'sumChart', this.sumChart)
     }
   }
 }
